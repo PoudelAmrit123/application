@@ -1,0 +1,15 @@
+name: Pull Request Test
+
+on:
+  pull_request:
+    branches:
+      - dev
+      
+
+jobs:
+  pr-echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: From the feature branch
+        run: echo " Pull request from features branch"
+
