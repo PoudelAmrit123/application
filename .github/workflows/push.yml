@@ -4,22 +4,26 @@ on:
  push:
    branches:
      - dev
-env:
-  CLERK_PUBLISHABLE_KEY: ${{ vars.CLERK_PUBLISHABLE_KEY }}
-  DB_CLIENT: ${{ vars.DB_CLIENT }}
-  DB_HOST: ${{ vars.DB_HOST }}
-  DB_NAME: ${{ vars.DB_NAME }}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  DB_PORT: ${{ vars.DB_PORT }}
-  DB_USER: ${{ vars.DB_USER }}
-  NODE_ENV: ${{ vars.NODE_ENV }}
-  VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
-  CLERK_SECRET_KEY: ${{ vars.CLERK_SECRET_KEY }}
+     - main
+# env:
+#   CLERK_PUBLISHABLE_KEY: ${{ vars.CLERK_PUBLISHABLE_KEY }}
+#   DB_CLIENT: ${{ vars.DB_CLIENT }}
+#   DB_HOST: ${{ vars.DB_HOST }}
+#   DB_NAME: ${{ vars.DB_NAME }}
+#   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+#   DB_PORT: ${{ vars.DB_PORT }}
+#   DB_USER: ${{ vars.DB_USER }}
+#   NODE_ENV: ${{ vars.NODE_ENV }}
+#   VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
+#   CLERK_SECRET_KEY: ${{ vars.CLERK_SECRET_KEY }}
 
 jobs:
   frontend:
     runs-on: ubuntu-latest
-    # environment: feature
+    environment: >
+      ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
+          github.ref_name == 'dev' && 'dev' ||
+          github.ref_name == 'main' && 'main' }}
     steps:
       - name: Test
         run: echo "Hello from the frontend"
@@ -32,18 +36,27 @@ jobs:
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Extract version From the package.json
+        id: version
+        run: |
+           VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' frontend/package.json)
+            echo "VERSION=$VERSION" >> $GITHUB_ENV
+
 
       - name: Building the Frontend Image
         run: |
-          docker build -t amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} ./frontend
+          docker build -t amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }}  ./frontend
 
-          docker tag amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} amritpoudel/frontend:1.0.0
+          docker tag amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} amritpoudel/frontend:${{ env.VERSION }}
 
-          docker push amritpoudel/frontend:1.0.0
+          docker push amritpoudel/frontend:${{ env.VERSION }}
 
   backend1:
     runs-on: ubuntu-latest
-    # environment: feature
+    environment: >
+      ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
+          github.ref_name == 'dev' && 'dev' ||
+          github.ref_name == 'main' && 'main' }}
     steps:
       - name: Test
         run: echo "Hello from the backend"
@@ -56,17 +69,26 @@ jobs:
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Extract version From the package.json
+        id: version
+        run: |
+           VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend1/package.json)
+            echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Building the Backend Image
         run: |
-          docker build -t amritpoudel/backend1:${{ github.ref_name }}-${{ github.sha }} --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} ./backend1
+          docker build -t amritpoudel/backend1:${{ github.ref_name }}-${{ github.sha }} ./backend1
 
-          docker tag amritpoudel/backend1:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend1:1.0.0
+          docker tag amritpoudel/backend1:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend1:${{ env.VERSION }}
 
-          docker push amritpoudel/backend1:1.0.0
+          docker push amritpoudel/backend1:${{ env.VERSION }}
         
   backend2:
     runs-on: ubuntu-latest
-    # environment: feature
+    environment: >
+      ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
+          github.ref_name == 'dev' && 'dev' ||
+          github.ref_name == 'main' && 'main' }}
     steps:
       - name: Test
         run: echo "Hello from the backend"
@@ -79,13 +101,19 @@ jobs:
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Extract version From the package.json
+        id: version
+        run: |
+           VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend2/package.json)
+            echo "VERSION=$VERSION" >> $GITHUB_ENV
+      
       - name: Building the Backend Image
         run: |
-          docker build -t amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} ./backend2
+          docker build -t amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }}./backend2
 
-          docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:1.0.0
+          docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:${{ env.VERSION }}
 
-          docker push amritpoudel/backend2:1.0.0
+          docker push amritpoudel/backend2:${{ env.VERSION }}
           
 
 
