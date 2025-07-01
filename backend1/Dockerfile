@@ -1,4 +1,3 @@
-=== Base stage ===
 FROM node:18 AS base
 
 WORKDIR /app

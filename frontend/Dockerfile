@@ -2,8 +2,8 @@ FROM node:18 AS build
 WORKDIR /app
 
 COPY package.json yarn.lock ./
-RUN yarn  --network_timeout 300000 
-
+#RUN yarn  --network_timeout 300000 
+RUN yarn install --frozen-lockfile --network-timeout 300000
 COPY . .
 RUN yarn build
 
