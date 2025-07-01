@@ -5,20 +5,21 @@ on:
    branches:
      - dev
 env:
-  CLERK_PUBLISHABLE_KEY: ${{ vars.CLERK_PUBLISHABLE_KEY}}
-  DB_CLIENT: ${{ vars.DB_CLIENT}}
-  DB_HOST: ${{ vars.DB_HOST}}
-  DB_NAME: ${{ vars.DB_NAME}}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD}}
-  DB_PORT: ${{ vars.DB_PORT}}
-  DB_USER: ${{ vars.DB_USER}}
-  NODE_ENV: ${{ vars.NODE_ENV}}
-  VITE_CLERK_PUBLISHABLE_KEY: ${{vars.VITE_CLERK_PUBLISHABLE_KEY}}
-  CLERK_SECRET_KEY: ${{ vars.CLERK_SECRET_KEY}}
+  CLERK_PUBLISHABLE_KEY: ${{ vars.CLERK_PUBLISHABLE_KEY }}
+  DB_CLIENT: ${{ vars.DB_CLIENT }}
+  DB_HOST: ${{ vars.DB_HOST }}
+  DB_NAME: ${{ vars.DB_NAME }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_PORT: ${{ vars.DB_PORT }}
+  DB_USER: ${{ vars.DB_USER }}
+  NODE_ENV: ${{ vars.NODE_ENV }}
+  VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
+  CLERK_SECRET_KEY: ${{ vars.CLERK_SECRET_KEY }}
 
 jobs:
   frontend:
     runs-on: ubuntu-latest
+    # environment: feature
     steps:
       - name: Test
         run: echo "Hello from the frontend"
@@ -42,6 +43,7 @@ jobs:
 
   backend1:
     runs-on: ubuntu-latest
+    # environment: feature
     steps:
       - name: Test
         run: echo "Hello from the backend"
@@ -64,6 +66,7 @@ jobs:
         
   backend2:
     runs-on: ubuntu-latest
+    # environment: feature
     steps:
       - name: Test
         run: echo "Hello from the backend"
@@ -80,7 +83,7 @@ jobs:
         run: |
           docker build -t amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} ./backend2
 
-          docker tag amritpoudel/backend1:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:1.0.0
+          docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:1.0.0
 
           docker push amritpoudel/backend2:1.0.0
           
