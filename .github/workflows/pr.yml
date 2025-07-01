@@ -1,15 +1,124 @@
-name: Pull Request Test
+# name: Pull Request Test
+
+# on:
+#   pull_request:
+#     branches:
+#       - dev
+      
+
+# jobs:
+#   pr-echo:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: From the feature branch
+#         run: echo " Pull request from features branch"
+name: PR Checks
 
 on:
   pull_request:
     branches:
       - dev
-      
+      - main
 
 jobs:
-  pr-echo:
+  frontend-lint:
     runs-on: ubuntu-latest
     steps:
-      - name: From the feature branch
-        run: echo " Pull request from features branch"
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ./frontend
+      - name: Lint check
+        run: yarn lint
+        working-directory: ./frontend
 
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ./frontend
+      - name: Build
+        run: yarn build
+        working-directory: ./frontend
+
+  backend1-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ./backend1
+      - name: Lint check
+        run: yarn lint
+        working-directory: ./backend1
+
+  backend1-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ./backend1
+      - name: Build
+        run: yarn build
+        working-directory: ./backend1
+
+  backend2-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ./backend2
+      - name: Lint check
+        run: yarn lint
+        working-directory: ./backend2
+
+  backend2-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ./backend2
+      - name: Build
+        run: yarn build
+        working-directory: ./backend2
