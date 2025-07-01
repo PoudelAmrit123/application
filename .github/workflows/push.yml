@@ -109,7 +109,7 @@ jobs:
       
       - name: Building the Backend Image
         run: |
-          docker build -t amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }}./backend2
+          docker build -t amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} ./backend2
 
           docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:${{ env.VERSION }}
 
