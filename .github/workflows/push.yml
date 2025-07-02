@@ -19,7 +19,7 @@ on:
 
 jobs:
   frontend:
-    runs-on: ubuntu-latest
+    runs-on: [frontend]
     environment: >
       ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
           github.ref_name == 'dev' && 'dev' ||
@@ -52,7 +52,7 @@ jobs:
           docker push amritpoudel/frontend:${{ env.VERSION }}
 
   backend1:
-    runs-on: ubuntu-latest
+    runs-on: [backend]
     environment: >
       ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
           github.ref_name == 'dev' && 'dev' ||
@@ -84,7 +84,7 @@ jobs:
           docker push amritpoudel/backend1:${{ env.VERSION }}
         
   backend2:
-    runs-on: ubuntu-latest
+    runs-on: [backend]
     environment: >
       ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
           github.ref_name == 'dev' && 'dev' ||
