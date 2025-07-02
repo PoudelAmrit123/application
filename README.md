@@ -5,3 +5,4 @@ feature/user branch
 from dev branch
 from dev branch again
 from dev branch again
+from dev branch again after adding user to the docker group
