@@ -45,7 +45,7 @@ jobs:
 
       - name: Building the Frontend Image
         run: |
-          docker build -t amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }}  ./frontend
+          docker build -t amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ env.VITE_CLERK_PUBLISHABLE_KEY}}  ./frontend
 
           docker tag amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} amritpoudel/frontend:${{ env.VERSION }}
 
