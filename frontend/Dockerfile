@@ -2,6 +2,8 @@ FROM node:18 AS build
 WORKDIR /app
 
 COPY package.json yarn.lock ./
+ARG VITE_CLERK_PUBLISHABLE_KEY
+ENV VITE_CLERK_PUBLISHABLE_KEY=$VITE_CLERK_PUBLISHABLE_KEY
 #RUN yarn  --network_timeout 300000 
 RUN yarn install --frozen-lockfile --network-timeout 300000
 COPY . .
