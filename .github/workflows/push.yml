@@ -144,90 +144,90 @@ jobs:
 
           docker push amritpoudel/backend2:${{ env.VERSION }}
 
-  github-pages:
-    needs: frontend
-    if: needs.changes.outputs.frontend == 'true' && github.ref_name == 'main'
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    permissions:
-      contents: read      # To read repo contents
-      pages: write        # To deploy to Pages
-      id-token: write     # Required by deploy-pages
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: yarn install
-        working-directory: ./frontend
-
-      - name: Build frontend
-        run: yarn build
-        working-directory: ./frontend
-        env:
-          VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
-
-      - name: Add 404.html for SPA routing
-        run: cp ./frontend/dist/index.html ./frontend/dist/404.html
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./frontend/dist
-
-  deploy-pages:
-    needs: github-pages
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4      
   # github-pages:
-  #  needs: frontend
-  #  permissions:
-  #     contents: write
-  #  if: |
-  #    needs.changes.outputs.frontend == 'true'  && github.ref_name == 'main'
+  #   needs: frontend
+  #   if: needs.changes.outputs.frontend == 'true' && github.ref_name == 'main'
+  #   runs-on: ubuntu-latest
+  #   environment:
+  #     name: github-pages
+  #     url: ${{ steps.deployment.outputs.page_url }}
+  #   permissions:
+  #     contents: read      # To read repo contents
+  #     pages: write        # To deploy to Pages
+  #     id-token: write     # Required by deploy-pages
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Setup Node
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 18
+
+  #     - name: Install dependencies
+  #       run: yarn install
+  #       working-directory: ./frontend
+
+  #     - name: Build frontend
+  #       run: yarn build
+  #       working-directory: ./frontend
+  #       env:
+  #         VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
+
+  #     - name: Add 404.html for SPA routing
+  #       run: cp ./frontend/dist/index.html ./frontend/dist/404.html
+
+  #     - name: Upload Pages artifact
+  #       uses: actions/upload-pages-artifact@v3
+  #       with:
+  #         path: ./frontend/dist
+
+  # deploy-pages:
+  #   needs: github-pages
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     pages: write
+  #     id-token: write
+  #   environment:
+  #     name: github-pages
+  #   steps:
+  #     - name: Deploy to GitHub Pages
+  #       id: deployment
+  #       uses: actions/deploy-pages@v4      
+  github-pages:
+   needs: frontend
+   permissions:
+      contents: write
+   if: |
+     needs.changes.outputs.frontend == 'true'  && github.ref_name == 'main'
     
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #   - name: Checkout code
-  #     uses: actions/checkout@v4
+   runs-on: ubuntu-latest
+   steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-  #   - name: setting up Node.js
-  #     uses: actions/setup-node@v4
+    - name: setting up Node.js
+      uses: actions/setup-node@v4
 
-  #   - name: Installing dependencies.
-  #     run: yarn install
-  #     working-directory: ./frontend
+    - name: Installing dependencies.
+      run: yarn install
+      working-directory: ./frontend
 
-  #   - name: Building Frontend
-  #     env:
-  #       VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
-  #     run: yarn build
-  #     working-directory: ./frontend
-  #   - name: Create 404.html for SPA fallback
-  #     run: cp ./frontend/dist/index.html ./frontend/dist/404.html
+    - name: Building Frontend
+      env:
+        VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
+      run: yarn build
+      working-directory: ./frontend
+    - name: Create 404.html for SPA fallback
+      run: cp ./frontend/dist/index.html ./frontend/dist/404.html
     
-  #   - name: Deploy
-  #     uses: peaceiris/actions-gh-pages@v4
-  #     with:
-  #       github_token: ${{ secrets.GITHUB_TOKEN }}
-  #       publish_dir: ./frontend/dist
-  #       publish_branch: gh-pages
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./frontend/dist
+        publish_branch: gh-pages
 
 
          
