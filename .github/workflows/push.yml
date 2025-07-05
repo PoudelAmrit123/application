@@ -164,6 +164,8 @@ jobs:
       working-directory: ./frontend
 
     - name: Building Frontend
+      env:
+        VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
       run: yarn build
       working-directory: ./frontend
     
