@@ -162,6 +162,10 @@ jobs:
     - name: Installing dependencies.
       run: yarn install
       working-directory: ./frontend
+
+    - name: Building Frontend
+      run: yarn build
+      working-directory: ./frontend
     
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
