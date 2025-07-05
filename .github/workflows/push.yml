@@ -144,6 +144,29 @@ jobs:
 
           docker push amritpoudel/backend2:${{ env.VERSION }}
           
+  github-pages:
+   needs: frontend
+   if: |
+    ${{ needs.changes.outputs.backend2 == 'true' }} && github.ref_name == 'main'
+    
+   runs-on: ubuntu-latest
+   steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: setting up Node.js
+      uses: actions/setup-node@v4
+
+    - name: Installing dependencies.
+      run: yarn install
+      working-directory: ./frontend
+    
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./frontend/dist
+        publish_branch: gh-pages
 
 
          
