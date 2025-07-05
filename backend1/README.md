@@ -1,4 +1,3 @@
-massive changes
 # Description
 
 Nodejs and typescript starter template
