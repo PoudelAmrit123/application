@@ -4,7 +4,6 @@ This template provides a minimal setup to get React working in Vite with HMR and
 This template is again changed to trigger the githubpages
 This template is once again changed to trigger the githubpages.
 Adding the Build
-Changing the value
 changing the value to add github action for github pages 
 Currently, two official plugins are available
 
