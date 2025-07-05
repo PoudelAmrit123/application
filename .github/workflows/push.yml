@@ -146,8 +146,10 @@ jobs:
           
   github-pages:
    needs: frontend
+   permissions:
+      contents: write
    if: |
-    ${{ needs.changes.outputs.backend2 == 'true' }} && github.ref_name == 'main'
+     needs.changes.outputs.frontend == 'true'  && github.ref_name == 'main'
     
    runs-on: ubuntu-latest
    steps:
