@@ -72,7 +72,7 @@ jobs:
             
           ]
        env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN}}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   semantic-backend1:
     #  if: github.ref_name == 'dev'
      runs-on: ubuntu-latest
@@ -102,7 +102,7 @@ jobs:
                 
               ]
         env:
-            GITHUB_TOKEN: ${{ secrets.GH_TOKEN}}
+            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   
   semantic-backend2:
     #  if: github.ref_name == 'dev'
@@ -133,7 +133,7 @@ jobs:
                 
               ]
         env:
-            GITHUB_TOKEN: ${{ secrets.GH_TOKEN}} 
+            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
   frontend:
     needs: ['changes' , 'semantic-frontend']
     if: ${{ needs.changes.outputs.frontend == 'true' }}
