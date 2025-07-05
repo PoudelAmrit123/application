@@ -2,7 +2,6 @@
 Changing the ReadmeFile from  the new branch
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 This template is again changed to trigger the githubpages
-template is once again changed to trigger the githubpages.
 Currently, two official plugins are available
 
 

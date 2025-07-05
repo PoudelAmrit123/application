@@ -57,8 +57,8 @@ jobs:
         persist-credentials: false
      - name: Setting Up Node.js
        uses: actions/setup-node@v4
-    #  - name: Test git push with PAT
-    #    run: |
+    #- name: Test git push with PAT
+    #   run: |
        
     #     git tag test-$(date +%s)
     #     git remote add auth-origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
@@ -83,8 +83,8 @@ jobs:
             },
             
           ]
-      #  env:
-      #   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+       env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   semantic-backend1:
     #  if: github.ref_name == 'dev'
      runs-on: ubuntu-latest
@@ -184,7 +184,7 @@ jobs:
         run: |
           echo "FRONTEND_VERSION=${{ needs.semantic-release-frontend.outputs.frontend_version }}" >> $GITHUB_ENV
           #  VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' frontend/package.json)
-            # FRONTEND_VERSION=${{ needs.semantic-release-frontend.outputs.frontend_version }}
+            # FRONTEND_VERSION=${{ needs.semantic-frontend.outputs.frontend_version }}
             # echo "FRONTEND_VERSION=$FRONTEND_VERSION" >> $GITHUB_ENV
 
 
@@ -220,7 +220,7 @@ jobs:
         id: version
         run: |
           #  VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend1/package.json)
-            BACKEND1_VERSION=${{ needs.semantic-release-backend1.outputs.backend1_version }}
+            BACKEND1_VERSION=${{ needs.semantic-backend1.outputs.backend1_version }}
             echo "BACKEND1_VERSION=$BACKEND1_VERSION" >> $GITHUB_ENV
 
       - name: Building the Backend Image
@@ -255,7 +255,7 @@ jobs:
         id: version
         run: |
           #  VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend2/package.json)
-          BACKEND2_VERSION=${{ needs.semantic-release-backend2.outputs.backend2_version }}
+          BACKEND2_VERSION=${{ needs.semantic-backend2.outputs.backend2_version }}
             echo "BACKEND2_VERSION=$BACKEND2_VERSION" >> $GITHUB_ENV
       
       - name: Building the Backend Image
