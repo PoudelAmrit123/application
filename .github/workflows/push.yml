@@ -53,10 +53,13 @@ jobs:
        uses: actions/checkout@v4
      - name: Setting Up Node.js
        uses: actions/setup-node@v4
-     - name: Test git push permission
+     - name: Test git push with PAT
        run: |
+          git config user.name "semantic-release"
+          git config user.email "semantic-release@github.com"
           git tag test-tag
           git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} test-tag
+
      - name: Semantic on dev
        id: semantic-release
        uses: cycjimmy/semantic-release-action@v4
@@ -75,8 +78,8 @@ jobs:
             },
             
           ]
-       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      #  env:
+      #   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   semantic-backend1:
     #  if: github.ref_name == 'dev'
      runs-on: ubuntu-latest
