@@ -168,6 +168,8 @@ jobs:
         VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
       run: yarn build
       working-directory: ./frontend
+    - name: Create 404.html for SPA fallback
+      run: cp ./frontend/dist/index.html ./frontend/dist/404.html
     
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
