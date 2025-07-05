@@ -55,6 +55,7 @@ jobs:
        uses: actions/checkout@v4
        with:
         persist-credentials: false
+        fetch-depth: 0
      - name: Setting Up Node.js
        uses: actions/setup-node@v4
     #- name: Test git push with PAT
@@ -95,6 +96,7 @@ jobs:
         uses: actions/checkout@v4
         with:
          persist-credentials: false
+         fetch-depth: 0
       - name: Setting Up Node.js
         uses: actions/setup-node@v4
       # - name: Test git push permission
@@ -132,6 +134,7 @@ jobs:
         uses: actions/checkout@v4
         with:
          persist-credentials: false
+         fetch-depth: 0
       - name: Setting Up Node.js
         uses: actions/setup-node@v4
       # - name: Test git push permission
