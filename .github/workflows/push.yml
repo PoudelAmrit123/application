@@ -5,6 +5,10 @@ on:
    branches:
      - dev
      - main
+   paths:
+     - 'frontend/**'
+     - 'backend1/**'
+     - 'backend2/**'
 # env:
 #   CLERK_PUBLISHABLE_KEY: ${{ vars.CLERK_PUBLISHABLE_KEY }}
 #   DB_CLIENT: ${{ vars.DB_CLIENT }}
@@ -18,7 +22,28 @@ on:
 #   CLERK_SECRET_KEY: ${{ vars.CLERK_SECRET_KEY }}
 
 jobs:
+  changes:
+   runs-on: ubuntu-latest
+   outputs:
+     frontend: ${{ steps.filter.outputs.frontend}}
+     backend1: ${{steps.filter.outputs.backend1}}
+     backend2: ${{steps.filter.outputs.backend2}}
+   steps:
+     - name: Code Cloning 
+       uses: actions/checkout@v4
+     - name: Detect Changed directories
+       id: filter
+       uses: dorny/paths-filter@v3
+       with:
+        filters: |
+          backend:
+            - 'backend/**'
+          frontend:
+            - 'frontend/**'
+     
   frontend:
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
     runs-on: [frontend]
     environment: >
       ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
@@ -27,7 +52,7 @@ jobs:
     steps:
       - name: Test
         run: echo "Hello from the frontend"
-      - name: Code Cloning to ubuntu
+      - name: Code Cloning to frontend Runner.
         uses: actions/checkout@v4
           #- name: Set up Docker
           #uses: docker/setup-docker-action@v4
@@ -52,6 +77,8 @@ jobs:
           docker push amritpoudel/frontend:${{ env.VERSION }}
 
   backend1:
+    needs: changes
+    if: ${{ needs.changes.outputs.backend1 == 'true' }}
     runs-on: [backend]
     environment: >
       ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
@@ -84,6 +111,8 @@ jobs:
           docker push amritpoudel/backend1:${{ env.VERSION }}
         
   backend2:
+    needs: changes
+    if: ${{ needs.changes.outputs.backend2 == 'true' }}
     runs-on: [backend]
     environment: >
       ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
