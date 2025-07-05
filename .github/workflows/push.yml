@@ -60,6 +60,7 @@ jobs:
         git tag test-$(date +%s)
         git remote add auth-origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
         git push auth-origin --tags
+        
 
      - name: Semantic on dev
        id: semantic-release
