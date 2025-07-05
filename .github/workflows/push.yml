@@ -25,26 +25,142 @@ jobs:
   changes:
    runs-on: ubuntu-latest
    outputs:
-     frontend: ${{ steps.filter.outputs.frontend}}
-     backend1: ${{steps.filter.outputs.backend1}}
-     backend2: ${{steps.filter.outputs.backend2}}
+     frontend: ${{ steps.filter.outputs.frontend }}
+     backend1: ${{ steps.filter.outputs.backend1 }}
+     backend2: ${{ steps.filter.outputs.backend2 }}
    steps:
      - name: Code Cloning 
        uses: actions/checkout@v4
+       with:
+        persist-credentials: false
      - name: Detect Changed directories
        id: filter
        uses: dorny/paths-filter@v3
        with:
         filters: |
-          backend:
-            - 'backend/**'
+          backend1:
+            - 'backend1/**'
           frontend:
             - 'frontend/**'
-     
+          backend2: 
+            - 'backend2/**'
+
+  semantic-frontend:
+  #  if: github.ref_name == 'dev'
+   runs-on: ubuntu-latest
+   outputs:
+     frontend_version: ${{ steps.semantic-release.outputs.new_release_version}}
+   steps:
+     - name: Checkout
+       uses: actions/checkout@v4
+       with:
+        persist-credentials: false
+     - name: Setting Up Node.js
+       uses: actions/setup-node@v4
+    #  - name: Test git push with PAT
+    #    run: |
+       
+    #     git tag test-$(date +%s)
+    #     git remote add auth-origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
+    #     git push auth-origin --tags
+
+
+     - name: Semantic on dev
+       id: semantic-release
+       uses: cycjimmy/semantic-release-action@v4
+       with:
+         
+         working_directory: frontend
+         branches: |
+          [
+            
+            
+            'main',
+            
+            {
+              name: 'dev',
+              prerelease: true
+            },
+            
+          ]
+      #  env:
+      #   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  semantic-backend1:
+    #  if: github.ref_name == 'dev'
+     runs-on: ubuntu-latest
+     outputs:
+      backend1_version: ${{ steps.semantic-release.outputs.new_release_version}}
+     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+         persist-credentials: false
+      - name: Setting Up Node.js
+        uses: actions/setup-node@v4
+      # - name: Test git push permission
+      #   run: |
+      #     git tag test-tag
+      #     git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} test-tag
+      - name: Semantic on dev
+        id: semantic-release
+        uses: cycjimmy/semantic-release-action@v4
+        with:
+           
+            working_directory: backend1
+            branches: |
+              [
+                
+                
+                'main',
+                
+                {
+                  name: 'dev',
+                  prerelease: true
+                },
+                
+              ]
+        env:
+            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  
+  semantic-backend2:
+    #  if: github.ref_name == 'dev'
+     runs-on: ubuntu-latest
+     outputs:
+      backend2_version: ${{ steps.semantic-release.outputs.new_release_version}}
+     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setting Up Node.js
+        uses: actions/setup-node@v4
+      - name: Test git push permission
+        run: |
+          git tag test-tag
+          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} test-tag
+
+      - name: Semantic on dev
+        id: semantic-release
+        uses: cycjimmy/semantic-release-action@v4
+        with:
+            
+            working_directory: backend2
+            branches: |
+              [
+                
+                
+                'main',
+                
+                {
+                  name: 'dev',
+                  prerelease: true
+                },
+                
+              ]
+        env:
+            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
   frontend:
-    needs: changes
+    needs: ['changes' , 'semantic-frontend']
     if: ${{ needs.changes.outputs.frontend == 'true' }}
-    runs-on: [frontend]
+    runs-on: frontend
     environment: >
       ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
           github.ref_name == 'dev' && 'dev' ||
@@ -54,8 +170,8 @@ jobs:
         run: echo "Hello from the frontend"
       - name: Code Cloning to frontend Runner.
         uses: actions/checkout@v4
-          #- name: Set up Docker
-          #uses: docker/setup-docker-action@v4
+        #- name: Set up Docker
+        #uses: docker/setup-docker-action@v4
       - name: Docker login
         uses: docker/login-action@v3
         with:
@@ -64,22 +180,24 @@ jobs:
       - name: Extract version From the package.json
         id: version
         run: |
-           VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' frontend/package.json)
-            echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "FRONTEND_VERSION=${{ needs.semantic-release-frontend.outputs.frontend_version }}" >> $GITHUB_ENV
+          #  VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' frontend/package.json)
+            # FRONTEND_VERSION=${{ needs.semantic-release-frontend.outputs.frontend_version }}
+            # echo "FRONTEND_VERSION=$FRONTEND_VERSION" >> $GITHUB_ENV
 
 
       - name: Building the Frontend Image
         run: |
           docker build -t amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY}}  ./frontend
 
-          docker tag amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} amritpoudel/frontend:${{ env.VERSION }}
+          docker tag amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
 
-          docker push amritpoudel/frontend:${{ env.VERSION }}
+          docker push amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
 
   backend1:
-    needs: changes
+    needs: [changes, semantic-backend1]
     if: ${{ needs.changes.outputs.backend1 == 'true' }}
-    runs-on: [backend]
+    runs-on: backend
     environment: >
       ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
           github.ref_name == 'dev' && 'dev' ||
@@ -99,21 +217,22 @@ jobs:
       - name: Extract version From the package.json
         id: version
         run: |
-           VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend1/package.json)
-            echo "VERSION=$VERSION" >> $GITHUB_ENV
+          #  VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend1/package.json)
+            BACKEND1_VERSION=${{ needs.semantic-release-backend1.outputs.backend1_version }}
+            echo "BACKEND1_VERSION=$BACKEND1_VERSION" >> $GITHUB_ENV
 
       - name: Building the Backend Image
         run: |
           docker build -t amritpoudel/backend1:${{ github.ref_name }}-${{ github.sha }} ./backend1
 
-          docker tag amritpoudel/backend1:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend1:${{ env.VERSION }}
+          docker tag amritpoudel/backend1:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
 
-          docker push amritpoudel/backend1:${{ env.VERSION }}
+          docker push amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
         
   backend2:
-    needs: changes
+    needs: [changes, semantic-backend2]
     if: ${{ needs.changes.outputs.backend2 == 'true' }}
-    runs-on: [backend]
+    runs-on: backend
     environment: >
       ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
           github.ref_name == 'dev' && 'dev' ||
@@ -133,16 +252,17 @@ jobs:
       - name: Extract version From the package.json
         id: version
         run: |
-           VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend2/package.json)
-            echo "VERSION=$VERSION" >> $GITHUB_ENV
+          #  VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend2/package.json)
+          BACKEND2_VERSION=${{ needs.semantic-release-backend2.outputs.backend2_version }}
+            echo "BACKEND2_VERSION=$BACKEND2_VERSION" >> $GITHUB_ENV
       
       - name: Building the Backend Image
         run: |
           docker build -t amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} ./backend2
 
-          docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:${{ env.VERSION }}
+          docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
 
-          docker push amritpoudel/backend2:${{ env.VERSION }}
+          docker push amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
 
   # github-pages:
   #   needs: frontend
