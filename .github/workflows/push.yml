@@ -58,7 +58,7 @@ jobs:
         fetch-depth: 0
      - name: Fetch all tags and branches
        run: |
-          git fetch --prune --unshallow
+          git fetch --prune 
           git fetch --tags
 
      - name: Sync local branch with remote
@@ -107,7 +107,7 @@ jobs:
          fetch-depth: 0
       - name: Fetch all tags and branches
         run: |
-          git fetch --prune --unshallow
+          git fetch --prune 
           git fetch --tags
 
       - name: Sync local branch with remote
@@ -153,7 +153,7 @@ jobs:
          fetch-depth: 0
       - name: Fetch all tags and branches
         run: |
-          git fetch --prune --unshallow
+          git fetch --prune 
           git fetch --tags
 
       - name: Sync local branch with remote
