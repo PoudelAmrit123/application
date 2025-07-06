@@ -1,7 +1,7 @@
 {
   "name": "nodejs-starter-typescript",
-  "version": "1.0.0",
-    "description": "Starter template for nodejs with typescript",
+  "version": "1.0.2-dev.2",
+  "description": "Starter template for nodejs with typescript",
   "main": "index.js",
   "scripts": {
     "start": "nodemon",

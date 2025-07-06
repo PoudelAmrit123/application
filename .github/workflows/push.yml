@@ -215,6 +215,40 @@ jobs:
         with:
           name: frontend-image
           path: frontend-image.tar
+      - name: setting up Node.js
+        uses: actions/setup-node@v4
+
+      - name: Installing dependencies.
+        run: yarn install
+        working-directory: ./frontend
+
+      - name: Building Frontend
+        env:
+          VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
+        run: yarn build
+        working-directory: ./frontend
+      - name: Zip frontend build folder
+        if: github.ref_name == 'main'
+        run: zip -r frontend-dist.zip ./frontend/dist
+
+      - name: Upload zipped frontend build artifact
+        if: github.ref_name == 'main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist-zip
+          path: frontend-dist.zip
+
+      - name: Create GitHub Release
+        if: github.ref_name == 'main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.FRONTEND_VERSION }}
+          name: Release ${{ env.FRONTEND_VERSION }}
+          files: |
+            frontend-image.tar
+            frontend-dist.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   backend1:
     # needs: [changes]
@@ -279,11 +313,35 @@ jobs:
         run: yarn build
         working-directory: ./backend1
       
-      - name: Uploading backend1 build
+      # - name: Uploading backend1 build
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: backend1-build
+      #     path: ./backend1/dist 
+
+      - name: Zip backend1 build folder
+        if: github.ref_name == 'main'
+        run: zip -r backend1-dist.zip ./backend1/dist
+
+      - name: Upload zipped backend2 build artifact
+        if: github.ref_name == 'main'
         uses: actions/upload-artifact@v4
         with:
-          name: backend1-build
-          path: ./backend1/dist 
+          name: backend1-dist-zip
+          path: backend1-dist.zip
+
+      - name: Create GitHub Release
+        if: github.ref_name == 'main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.BACKEND1_VERSION }}
+          name: Release ${{ env.BACKEND1_VERSION }}
+          files: |
+            backend1-image.tar
+            backend1-dist.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
         
   backend2:
     needs: [changes, semantic-backend2]
@@ -349,11 +407,34 @@ jobs:
         run: yarn build
         working-directory: ./backend2
       
-      - name: Uploading backend2 build
+      # - name: Uploading backend2 build
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: backend2-build
+      #     path: ./backend2/dist 
+      
+      - name: Zip backend2 build folder
+        if: github.ref_name == 'main'
+        run: zip -r backend2-dist.zip ./backend2/dist
+
+      - name: Upload zipped backend2 build artifact
+        if: github.ref_name == 'main'
         uses: actions/upload-artifact@v4
         with:
-          name: backend2-build
-          path: ./backend2/dist 
+          name: backend2-dist-zip
+          path: backend2-dist.zip
+
+      - name: Create GitHub Release
+        if: github.ref_name == 'main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.BACKEND2_VERSION }}
+          name: Release ${{ env.BACKEND2_VERSION }}
+          files: |
+            backend2-image.tar
+            backend2-dist.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
         
   # github-pages:
@@ -432,11 +513,11 @@ jobs:
       run: yarn build
       working-directory: ./frontend
    
-    - name: Upload frontend build as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: frontend-build
-        path: ./frontend/dist
+    # - name: Upload frontend build as artifact
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: frontend-build
+    #     path: ./frontend/dist
     - name: Create 404.html for SPA fallback
       run: cp ./frontend/dist/index.html ./frontend/dist/404.html
     - name: Deploy
