@@ -1,6 +1,5 @@
 # React + TypeScript + Vite
 
-template is again changed to trigger the githubae
 
 s template is again changed to trigger the githubae
 
