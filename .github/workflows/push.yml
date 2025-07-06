@@ -283,13 +283,17 @@ jobs:
             frontend-dist.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Download Trivy HTML report template
+        run: |
+          mkdir -p .trivy/templates
+          curl -sSL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o .trivy/templates/html.tpl
 
       - name: Tirvy Scan
         uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
           format: template
-          template: "@/contrib/html.tpl"
+          template: .trivy/templates/html.tpl
           output: frontend-scan.html
       - name: Uploading frontend scan report 
         uses: actions/upload-artifact@v4
@@ -398,13 +402,17 @@ jobs:
             backend1-dist.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Download Trivy HTML report template
+        run: |
+          mkdir -p .trivy/templates
+          curl -sSL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o .trivy/templates/html.tpl
 
       - name: Tirvy Scan
         uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
           format: template
-          template: "@/contrib/html.tpl"
+          template: .trivy/templates/html.tpl
           output: backend1-scan.html
       - name: Uploading backend1 scan report 
         uses: actions/upload-artifact@v4
@@ -512,14 +520,17 @@ jobs:
             backend2-dist.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
+      - name: Download Trivy HTML report template
+        run: |
+          mkdir -p .trivy/templates
+          curl -sSL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o .trivy/templates/html.tpl
       - name: Tirvy Scan
         uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
           
           format: template
-          template: "@/contrib/html.tpl"
+          template: .trivy/templates/html.tpl
           output: backend2-scan.html
       - name: Uploading backend2 scan report 
         uses: actions/upload-artifact@v4
