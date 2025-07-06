@@ -284,6 +284,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
+      - name: Tirvy Scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
+          format: html
+          output: frontend-scan.html
+      - name: Uploading frontend scan report 
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-report
+          path: frontend-scan.html
+
+
   backend1:
     needs: [changes]
     # needs: [changes, semantic-backend1]
@@ -385,7 +398,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-        
+      - name: Tirvy Scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
+          format: html
+          output: backend1-scan.html
+      - name: Uploading backend1 scan report 
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend1-report
+          path: backend1-scan.html 
   backend2:
     # needs: [changes, semantic-backend2]
     needs: [changes]
@@ -424,11 +447,11 @@ jobs:
           docker push amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
 
            if [ "${{ github.ref_name }}" = "main" ]; then
-          docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
+              docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
 
-          docker push amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
-          docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:latest
-          docker push amritpoudel/backend2:latest
+              docker push amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
+              docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:latest
+              docker push amritpoudel/backend2:latest
           fi
       - name: Saving Docker image as artifacts
         run: |
@@ -488,6 +511,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
+      - name: Tirvy Scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
+          format: html
+          output: backend2-scan.html
+      - name: Uploading backend2 scan report 
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend2-report
+          path: backend2-scan.html
+
         
   # github-pages:
   #   needs: frontend
@@ -539,9 +574,54 @@ jobs:
   #   steps:
   #     - name: Deploy to GitHub Pages
   #       id: deployment
-  #       uses: actions/deploy-pages@v4      
+  #       uses: actions/deploy-pages@v4  
+
+  merge-report:
+   needs: [frontend, backend1 , backend2]
+   runs-on: ubuntu-latest
+   steps:
+    - name:  frontend scan report
+      uses: actions/download-artifact@v4
+      with:
+        name: frontend-report
+        path: scan
+
+    - name:  backend1 scan report
+      uses: actions/download-artifact@v4
+      with:
+        name: backend1-report
+        path: scan
+
+    - name:  backend2 scan report
+      uses: actions/download-artifact@v4
+      with:
+        name: backend2-report
+        path: scan
+
+    - name: Mixing All three report 
+      run: | 
+        mkdir -p scan
+
+        echo '<html><head><title>Trivy Scan Reports</title></head><body><h1>Combined Trivy Reports</h1>' > scan/index.html
+
+        cat scan/frontend-scan.html >> scan/index.html
+        echo '<hr>' >> scan/index.html
+
+        cat scan/backend1-scan.html >> scan/index.html
+        echo '<hr>' >> scan/index.html
+
+        cat scan/backend2-scan.html >> scan/index.html
+
+        echo '</body></html>' >> scan/index.html
+    - name: upload mixed scan report
+      uses: actions/upload-artifact@v4
+      with:
+        name: merged-scan-report
+        path: scan/index.html
+
+
   github-pages:
-   needs: frontend
+   needs: [frontend , merge-report]
    permissions:
       contents: write
    if: |
@@ -578,6 +658,17 @@ jobs:
     #   with:
     #     name: frontend-build
     #     path: ./frontend/dist
+
+    - name: Download merged scan report artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: merged-scan-report
+        path: scan
+
+    - name: Copy merged scan report into frontend dist folder
+      run: |
+        mkdir -p ./frontend/dist/scan
+        cp scan/index.html ./frontend/dist/scan/report.html
     - name: Create 404.html for SPA fallback
       run: cp ./frontend/dist/index.html ./frontend/dist/404.html
     - name: Deploy
