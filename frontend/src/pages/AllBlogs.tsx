@@ -29,6 +29,13 @@ const AllBlogs: React.FC = () => {
                             The title is changed !(docker watch)
                         </Link>
                     </Typography>
+                     <Typography variant="h5" sx={{ flexGrow: 1, fontWeight: 700 }}>
+                        <Link to={"/scan"}>
+                            Trivy Scan Report
+                        </Link>
+                    </Typography>
+
+
                     <Button
                         component={Link}
                         to="/blogs/create"

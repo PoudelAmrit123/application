@@ -19,6 +19,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/blogs" replace />} />
               <Route path="/blogs" element={<AllBlogs />} />
+              <Route path="/scan" element={<Navigate to="/scan/report.html" replace />}/>
               <Route
                 path="/blogs/create"
                 element={
