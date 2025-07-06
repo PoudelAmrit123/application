@@ -215,7 +215,7 @@ jobs:
           #  VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' frontend/package.json)
             # FRONTEND_VERSION=${{ needs.semantic-frontend.outputs.frontend_version }}
             FRONTEND_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' frontend/package.json)
-            # echo "FRONTEND_VERSION=$FRONTEND_VERSION" >> $GITHUB_ENV
+            echo "FRONTEND_VERSION=$FRONTEND_VERSION" >> $GITHUB_ENV
 
 
       - name: Building the Frontend Image
