@@ -210,7 +210,7 @@ jobs:
         run: |
          docker save -o frontend-image.tar amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
       - name : Upload Frontend image  artifact
-        uses: actions/upload-artifacts@v4
+        uses: actions/upload-artifact@v4
         with:
           name: frontend-image
           path: frontend-image.tar
@@ -261,13 +261,18 @@ jobs:
         run: |
          docker save -o backend1-image.tar amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
       - name : Upload artifact
-        uses: actions/upload-artifacts@v4
+        uses: actions/upload-artifact@v4
         with:
           name: backend1-image
           path: backend1-image.tar
 
       - name: Setting up Nodejs
         uses: actions/setup-node@v4
+
+      - name: Install backend1 dependencies
+        run: yarn install
+        working-directory: ./backend1
+
 
       - name: Building backend1
         run: yarn build
@@ -324,12 +329,17 @@ jobs:
         run: |
          docker save -o backend2-image.tar amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
       - name : Upload artifact
-        uses: actions/upload-artifacts@v4
+        uses: actions/upload-artifact@v4
         with:
           name: backend2-image
           path: backend2-image.tar
       - name: Setting up Nodejs
         uses: actions/setup-node@v4
+      
+      - name: Installing backend2 dependencies
+        run: yarn install
+        working-directory: ./backend2
+
 
       - name: Building backend2
         run: yarn build
