@@ -103,7 +103,7 @@ jobs:
       #   run: |
       #     git tag test-tag
       #     git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} test-tag
-      - name: Semantic on dev
+      - name: Semantic on backend1
         id: semantic-release
         uses: cycjimmy/semantic-release-action@v4
         with:
@@ -142,7 +142,7 @@ jobs:
       #     git tag test-tag
       #     git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} test-tag
 
-      - name: Semantic on dev
+      - name: Semantic on backend2
         id: semantic-release
         uses: cycjimmy/semantic-release-action@v4
         with:
@@ -323,6 +323,9 @@ jobs:
           docker push amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
 
            if [ "${{ github.ref_name }}" = "main" ]; then
+          docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
+
+          docker push amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
           docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:latest
           docker push amritpoudel/backend2:latest
           fi
