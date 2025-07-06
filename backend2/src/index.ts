@@ -9,7 +9,6 @@ import { loggerMiddleware } from './wistonLogger/logger';
 dotenv.config();
 const app: Application = express();
 
-
 app.use(express.json());
 
 app.use(loggerMiddleware)
