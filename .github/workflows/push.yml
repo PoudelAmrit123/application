@@ -269,6 +269,11 @@ jobs:
       - name: Setting up Nodejs
         uses: actions/setup-node@v4
 
+      - name: Install backend1 dependencies
+        run: yarn install
+        working-directory: ./backend1
+
+
       - name: Building backend1
         run: yarn build
         working-directory: ./backend1
@@ -330,6 +335,11 @@ jobs:
           path: backend2-image.tar
       - name: Setting up Nodejs
         uses: actions/setup-node@v4
+      
+      - name: Installing backend2 dependencies
+        run: yarn install
+        working-directory: ./backend2
+
 
       - name: Building backend2
         run: yarn build
