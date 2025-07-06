@@ -243,6 +243,15 @@ jobs:
       - name: setting up Node.js
         uses: actions/setup-node@v4
 
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
       - name: Installing dependencies.
         run: yarn install
         working-directory: ./frontend
@@ -273,7 +282,7 @@ jobs:
             frontend-image.tar
             frontend-dist.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
   backend1:
     needs: [changes]
@@ -329,6 +338,15 @@ jobs:
       - name: Setting up Nodejs
         uses: actions/setup-node@v4
 
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
       - name: Install backend1 dependencies
         run: yarn install
         working-directory: ./backend1
@@ -365,7 +383,7 @@ jobs:
             backend1-image.tar
             backend1-dist.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
         
   backend2:
@@ -422,6 +440,15 @@ jobs:
           path: backend2-image.tar
       - name: Setting up Nodejs
         uses: actions/setup-node@v4
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
       
       - name: Installing backend2 dependencies
         run: yarn install
@@ -459,7 +486,7 @@ jobs:
             backend2-image.tar
             backend2-dist.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
         
   # github-pages:
@@ -527,6 +554,14 @@ jobs:
 
     - name: setting up Node.js
       uses: actions/setup-node@v4
+    - name: Cache node modules
+      uses: actions/cache@v4
+      with:
+        path: |
+          **/node_modules
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-modules-
 
     - name: Installing dependencies.
       run: yarn install
