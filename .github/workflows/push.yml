@@ -283,6 +283,7 @@ jobs:
             frontend-dist.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
       - name: Tirvy Scan
         uses: aquasecurity/trivy-action@0.28.0
         with:
@@ -294,6 +295,7 @@ jobs:
         with:
           name: frontend-report
           path: frontend-scan.html
+
 
   backend1:
     needs: [changes]
@@ -508,6 +510,7 @@ jobs:
             backend2-dist.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
       - name: Tirvy Scan
         uses: aquasecurity/trivy-action@0.28.0
         with:
@@ -519,6 +522,7 @@ jobs:
         with:
           name: backend2-report
           path: backend2-scan.html
+
         
   # github-pages:
   #   needs: frontend
