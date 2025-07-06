@@ -56,6 +56,14 @@ jobs:
        with:
         persist-credentials: false
         fetch-depth: 0
+     - name: Fetch all tags and branches
+       run: |
+          git fetch --prune --unshallow
+          git fetch --tags
+
+     - name: Sync local branch with remote
+       run: |
+          git reset --hard origin/${{ github.ref_name }}
      - name: Setting Up Node.js
        uses: actions/setup-node@v4
     #- name: Test git push with PAT
@@ -97,6 +105,14 @@ jobs:
         with:
          persist-credentials: false
          fetch-depth: 0
+      - name: Fetch all tags and branches
+        run: |
+          git fetch --prune --unshallow
+          git fetch --tags
+
+      - name: Sync local branch with remote
+        run: |
+          git reset --hard origin/${{ github.ref_name }}
       - name: Setting Up Node.js
         uses: actions/setup-node@v4
       # - name: Test git push permission
@@ -135,6 +151,15 @@ jobs:
         with:
          persist-credentials: false
          fetch-depth: 0
+      - name: Fetch all tags and branches
+        run: |
+          git fetch --prune --unshallow
+          git fetch --tags
+
+      - name: Sync local branch with remote
+        run: |
+          git reset --hard origin/${{ github.ref_name }}
+
       - name: Setting Up Node.js
         uses: actions/setup-node@v4
       # - name: Test git push permission
