@@ -288,7 +288,8 @@ jobs:
         uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
-          format: html
+          format: template
+          template: "@/contrib/html.tpl"
           output: frontend-scan.html
       - name: Uploading frontend scan report 
         uses: actions/upload-artifact@v4
@@ -402,7 +403,8 @@ jobs:
         uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
-          format: html
+          format: template
+          template: "@/contrib/html.tpl"
           output: backend1-scan.html
       - name: Uploading backend1 scan report 
         uses: actions/upload-artifact@v4
@@ -515,7 +517,9 @@ jobs:
         uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
-          format: html
+          
+          format: template
+          template: "@/contrib/html.tpl"
           output: backend2-scan.html
       - name: Uploading backend2 scan report 
         uses: actions/upload-artifact@v4
