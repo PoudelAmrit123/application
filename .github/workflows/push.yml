@@ -210,7 +210,7 @@ jobs:
         run: |
          docker save -o frontend-image.tar amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
       - name : Upload Frontend image  artifact
-        uses: actions/upload-artifacts@v4
+        uses: actions/upload-artifact@v4
         with:
           name: frontend-image
           path: frontend-image.tar
@@ -261,7 +261,7 @@ jobs:
         run: |
          docker save -o backend1-image.tar amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
       - name : Upload artifact
-        uses: actions/upload-artifacts@v4
+        uses: actions/upload-artifact@v4
         with:
           name: backend1-image
           path: backend1-image.tar
@@ -324,7 +324,7 @@ jobs:
         run: |
          docker save -o backend2-image.tar amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
       - name : Upload artifact
-        uses: actions/upload-artifacts@v4
+        uses: actions/upload-artifact@v4
         with:
           name: backend2-image
           path: backend2-image.tar
