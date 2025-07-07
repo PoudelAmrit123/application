@@ -1,3 +1,4 @@
+
 # [2.0.0-beta.5](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2025-07-07)
 
 
@@ -10,9 +11,12 @@
 # [2.0.0-beta.4](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2025-07-07)
 
 
+
 ### Bug Fixes
 
+
 * fixed the workflow file ([c53c3c7](https://github.com/PoudelAmrit123/application/commit/c53c3c74c6c63489ea55f3a9c21df383c485d63f))
+
 
 # [2.0.0-beta.3](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2025-07-07)
 
