@@ -185,8 +185,8 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
   frontend:
-    needs: ['changes' , 'semantic-frontend']
-    # needs: ['changes' ]
+    # needs: ['changes' , 'semantic-frontend']
+    needs: ['changes' ]
     if: ${{ needs.changes.outputs.frontend == 'true' }}
     runs-on: frontend
     environment: >
@@ -207,8 +207,8 @@ jobs:
         id: version
         run: |
           
-            # FRONTEND_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' frontend/package.json)
-            FRONTEND_VERSION=${{ needs.semantic-frontend.outputs.frontend_version }}
+            FRONTEND_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' frontend/package.json)
+            # FRONTEND_VERSION=${{ needs.semantic-frontend.outputs.frontend_version }}
             echo "FRONTEND_VERSION=$FRONTEND_VERSION" >> $GITHUB_ENV
 
 
@@ -297,8 +297,8 @@ jobs:
 
 
   backend1:
-    # needs: [changes]
-    needs: [changes, semantic-backend1]
+    needs: [changes]
+    # needs: [changes, semantic-backend1]
     if: ${{ needs.changes.outputs.backend1 == 'true' }}
     runs-on: backend
     environment: >
@@ -320,8 +320,8 @@ jobs:
         id: version
         run: |
           
-            # BACKEND1_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend1/package.json)
-            BACKEND1_VERSION=${{ needs.semantic-backend1.outputs.backend1_version }}
+            BACKEND1_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend1/package.json)
+            # BACKEND1_VERSION=${{ needs.semantic-backend1.outputs.backend1_version }}
             echo "BACKEND1_VERSION=$BACKEND1_VERSION" >> $GITHUB_ENV
 
       - name: Building the Backend Image
@@ -409,8 +409,8 @@ jobs:
           name: backend1-report
           path: backend1-scan.html 
   backend2:
-    needs: [changes, semantic-backend2]
-    # needs: [changes]
+    # needs: [changes, semantic-backend2]
+    needs: [changes]
     if: ${{ needs.changes.outputs.backend2 == 'true' }}
     runs-on: backend
     environment: >
@@ -431,8 +431,8 @@ jobs:
         id: version
         run: |
          
-          # BACKEND2_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend2/package.json)
-          BACKEND2_VERSION=${{ needs.semantic-backend2.outputs.backend2_version }}
+          BACKEND2_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend2/package.json)
+          # BACKEND2_VERSION=${{ needs.semantic-backend2.outputs.backend2_version }}
           echo "BACKEND2_VERSION=$BACKEND2_VERSION" >> $GITHUB_ENV
       
       - name: Building the Backend Image
