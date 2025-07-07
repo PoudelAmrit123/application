@@ -213,7 +213,7 @@ jobs:
         id: get_tag
         run: |
           git fetch --tags
-          VERSION=$(git describe --tags --abbrev=0)
+          VERSION=$(git describe --tags --abbrev=0 --always)
           echo "Latest tag is $VERSION"
           echo "FRONTEND_VERSION=${VERSION}" >> $GITHUB_ENV
       # - name: Extract version From the package.json
@@ -334,7 +334,7 @@ jobs:
         id: get_tag
         run: |
           git fetch --tags
-          VERSION=$(git describe --tags --abbrev=0)
+          VERSION=$(git describe --tags --abbrev=0 --always)
           echo "Latest tag is $VERSION"
           echo "BACKEND1_VERSION=${VERSION}" >> $GITHUB_ENV
 
@@ -454,7 +454,7 @@ jobs:
         id: get_tag
         run: |
           git fetch --tags
-          VERSION=$(git describe --tags --abbrev=0)
+          VERSION=$(git describe --tags --abbrev=0 --always)
           echo "Latest tag is $VERSION"
           echo "BACKEND2_VERSION=${VERSION}" >> $GITHUB_ENV
       # - name: Extract version From the package.json
