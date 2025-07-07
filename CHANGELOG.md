@@ -1,3 +1,10 @@
+# [1.1.0-beta.2](https://github.com/PoudelAmrit123/application/compare/v1.1.0-beta.1...v1.1.0-beta.2) (2025-07-07)
+
+
+### Bug Fixes
+
+* fixed the workflow not being triggered ([11a9e9f](https://github.com/PoudelAmrit123/application/commit/11a9e9f3ac86fdb39a30b9cd14c075b21500b753))
+
 # [1.1.0-beta.1](https://github.com/PoudelAmrit123/application/compare/v1.0.0...v1.1.0-beta.1) (2025-07-07)
 
 
