@@ -188,7 +188,7 @@ jobs:
     # needs: ['changes' , 'semantic-frontend']
     needs: ['changes' ]
     if: ${{ needs.changes.outputs.frontend == 'true' }}
-    runs-on: frontend
+    runs-on: frontendnew
     environment: >
       ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
           github.ref_name == 'dev' && 'dev' ||
@@ -300,7 +300,7 @@ jobs:
     needs: [changes]
     # needs: [changes, semantic-backend1]
     if: ${{ needs.changes.outputs.backend1 == 'true' }}
-    runs-on: backend
+    runs-on: backendnew
     environment: >
       ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
           github.ref_name == 'dev' && 'dev' ||
@@ -412,7 +412,7 @@ jobs:
     # needs: [changes, semantic-backend2]
     needs: [changes]
     if: ${{ needs.changes.outputs.backend2 == 'true' }}
-    runs-on: backend
+    runs-on: backendnew
     environment: >
       ${{ startsWith(github.ref_name, 'feature/') && 'feature' ||
           github.ref_name == 'dev' && 'dev' ||
