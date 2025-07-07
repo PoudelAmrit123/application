@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import AllBlogs from "./pages/AllBlogs";
 import SingleBlog from "./pages/SingleBlog";
