@@ -1,6 +1,8 @@
 {
   "name": "nodejs-starter-typescript",
+
   "version": "1.9.2",
+
   "description": "Starter template for nodejs with typescript",
   "main": "index.js",
   "scripts": {

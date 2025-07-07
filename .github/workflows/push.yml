@@ -1,6 +1,10 @@
 name: Building the docker image 
 
 on:
+ workflow_run:
+    workflows: ["Release"]
+    types:
+      - completed
  push:
    branches:
      - dev
@@ -9,6 +13,8 @@ on:
      - 'frontend/**'
      - 'backend1/**'
      - 'backend2/**'
+
+   
 # env:
 #   CLERK_PUBLISHABLE_KEY: ${{ vars.CLERK_PUBLISHABLE_KEY }}
 #   DB_CLIENT: ${{ vars.DB_CLIENT }}
@@ -203,22 +209,29 @@ jobs:
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Extract version From the package.json
-        id: version
+      - name: Get latest tag
+        id: get_tag
         run: |
+          git fetch --tags
+          VERSION=$(git describe --tags --abbrev=0 --always)
+          echo "Latest tag is $VERSION"
+          echo "FRONTEND_VERSION=${VERSION}" >> $GITHUB_ENV
+      # - name: Extract version From the package.json
+      #   id: version
+      #   run: |
           
-            FRONTEND_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' frontend/package.json)
-            # FRONTEND_VERSION=${{ needs.semantic-frontend.outputs.frontend_version }}
-            echo "FRONTEND_VERSION=$FRONTEND_VERSION" >> $GITHUB_ENV
+      #       FRONTEND_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' frontend/package.json)
+      #       # FRONTEND_VERSION=${{ needs.semantic-frontend.outputs.frontend_version }}
+      #       echo "FRONTEND_VERSION=$FRONTEND_VERSION" >> $GITHUB_ENV
 
 
       - name: Building the Frontend Image
         run: |
           docker build -t amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY}}  ./frontend
 
-          docker tag amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
+          docker tag amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} amritpoudel/frontend:${{  env.FRONTEND_VERSION }}
 
-          docker push amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
+          docker push amritpoudel/frontend:${{  env.FRONTEND_VERSION }}
 
           if [ "${{ github.ref_name }}" = "main" ]; then
           docker tag amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} amritpoudel/frontend:latest
@@ -228,7 +241,7 @@ jobs:
           
       - name: Saving Docker image as artifacts
         run: |
-         docker save -o frontend-image.tar amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
+         docker save -o frontend-image.tar amritpoudel/frontend:${{  env.FRONTEND_VERSION }}
       - name : Upload Frontend image  artifact
         uses: actions/upload-artifact@v4
         with:
@@ -270,8 +283,8 @@ jobs:
         if: github.ref_name == 'main'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.FRONTEND_VERSION }}
-          name: Release ${{ env.FRONTEND_VERSION }}
+          tag_name: ${{  env.FRONTEND_VERSION }}
+          name: Release ${{  env.FRONTEND_VERSION }}
           files: |
             frontend-image.tar
             
@@ -285,7 +298,7 @@ jobs:
       - name: Tirvy Scan
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
+          image-ref: amritpoudel/frontend:${{  env.FRONTEND_VERSION }}
           format: template
           template: '@.trivy/templates/html.tpl'
           output: frontend-scan.html
@@ -316,13 +329,22 @@ jobs:
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Extract version From the package.json
-        id: version
+      
+      - name: Get latest tag
+        id: get_tag
         run: |
+          git fetch --tags
+          VERSION=$(git describe --tags --abbrev=0 --always)
+          echo "Latest tag is $VERSION"
+          echo "BACKEND1_VERSION=${VERSION}" >> $GITHUB_ENV
+
+      # - name: Extract version From the package.json
+      #   id: version
+      #   run: |
           
-            BACKEND1_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend1/package.json)
-            # BACKEND1_VERSION=${{ needs.semantic-backend1.outputs.backend1_version }}
-            echo "BACKEND1_VERSION=$BACKEND1_VERSION" >> $GITHUB_ENV
+      #       BACKEND1_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend1/package.json)
+      #       # BACKEND1_VERSION=${{ needs.semantic-backend1.outputs.backend1_version }}
+      #       echo "BACKEND1_VERSION=$BACKEND1_VERSION" >> $GITHUB_ENV
 
       - name: Building the Backend Image
         run: |
@@ -427,13 +449,21 @@ jobs:
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Extract version From the package.json
-        id: version
+
+      - name: Get latest tag
+        id: get_tag
         run: |
+          git fetch --tags
+          VERSION=$(git describe --tags --abbrev=0 --always)
+          echo "Latest tag is $VERSION"
+          echo "BACKEND2_VERSION=${VERSION}" >> $GITHUB_ENV
+      # - name: Extract version From the package.json
+      #   id: version
+      #   run: |
          
-          BACKEND2_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend2/package.json)
-          # BACKEND2_VERSION=${{ needs.semantic-backend2.outputs.backend2_version }}
-          echo "BACKEND2_VERSION=$BACKEND2_VERSION" >> $GITHUB_ENV
+      #     BACKEND2_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend2/package.json)
+      #     # BACKEND2_VERSION=${{ needs.semantic-backend2.outputs.backend2_version }}
+      #     echo "BACKEND2_VERSION=$BACKEND2_VERSION" >> $GITHUB_ENV
       
       - name: Building the Backend Image
         run: |
