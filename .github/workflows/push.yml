@@ -46,7 +46,6 @@ jobs:
             - 'backend2/**'
 
   semantic-frontend:
-  #  if: github.ref_name == 'dev'
    runs-on: ubuntu-latest
    outputs:
      frontend_version: ${{ steps.semantic-release.outputs.new_release_version}}
@@ -95,7 +94,6 @@ jobs:
        env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   semantic-backend1:
-    #  if: github.ref_name == 'dev'
      runs-on: ubuntu-latest
      outputs:
       backend1_version: ${{ steps.semantic-release.outputs.new_release_version}}
@@ -141,7 +139,6 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   
   semantic-backend2:
-    #  if: github.ref_name == 'dev'
      runs-on: ubuntu-latest
      outputs:
       backend2_version: ${{ steps.semantic-release.outputs.new_release_version}}
@@ -188,8 +185,8 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
   frontend:
-    # needs: ['changes' , 'semantic-frontend']
-    needs: ['changes' ]
+    needs: ['changes' , 'semantic-frontend']
+    # needs: ['changes' ]
     if: ${{ needs.changes.outputs.frontend == 'true' }}
     runs-on: frontend
     environment: >
@@ -201,8 +198,6 @@ jobs:
         run: echo "Hello from the frontend"
       - name: Code Cloning to frontend Runner.
         uses: actions/checkout@v4
-        #- name: Set up Docker
-        #uses: docker/setup-docker-action@v4
       - name: Docker login
         uses: docker/login-action@v3
         with:
@@ -211,10 +206,9 @@ jobs:
       - name: Extract version From the package.json
         id: version
         run: |
-          # echo "FRONTEND_VERSION=${{ needs.semantic-frontend.outputs.frontend_version }}" >> $GITHUB_ENV
-          #  VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' frontend/package.json)
-            # FRONTEND_VERSION=${{ needs.semantic-frontend.outputs.frontend_version }}
-            FRONTEND_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' frontend/package.json)
+          
+            # FRONTEND_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' frontend/package.json)
+            FRONTEND_VERSION=${{ needs.semantic-frontend.outputs.frontend_version }}
             echo "FRONTEND_VERSION=$FRONTEND_VERSION" >> $GITHUB_ENV
 
 
@@ -293,7 +287,7 @@ jobs:
         with:
           image-ref: amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
           format: template
-          template: .trivy/templates/html.tpl
+          template: '@trivy/templates/html.tpl'
           output: frontend-scan.html
       - name: Uploading frontend scan report 
         uses: actions/upload-artifact@v4
@@ -303,8 +297,8 @@ jobs:
 
 
   backend1:
-    needs: [changes]
-    # needs: [changes, semantic-backend1]
+    # needs: [changes]
+    needs: [changes, semantic-backend1]
     if: ${{ needs.changes.outputs.backend1 == 'true' }}
     runs-on: backend
     environment: >
@@ -316,8 +310,7 @@ jobs:
         run: echo "Hello from the backend"
       - name: Code Cloning to ubuntu
         uses: actions/checkout@v4
-          #- name: Set up Docker
-          #uses: docker/setup-docker-action@v4
+    
       - name: Docker login
         uses: docker/login-action@v3
         with:
@@ -326,9 +319,9 @@ jobs:
       - name: Extract version From the package.json
         id: version
         run: |
-          #  VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend1/package.json)
-            # BACKEND1_VERSION=${{ needs.semantic-backend1.outputs.backend1_version }}
-            BACKEND1_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend1/package.json)
+          
+            # BACKEND1_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend1/package.json)
+            BACKEND1_VERSION=${{ needs.semantic-backend1.outputs.backend1_version }}
             echo "BACKEND1_VERSION=$BACKEND1_VERSION" >> $GITHUB_ENV
 
       - name: Building the Backend Image
@@ -374,17 +367,13 @@ jobs:
         run: yarn build
         working-directory: ./backend1
       
-      # - name: Uploading backend1 build
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: backend1-build
-      #     path: ./backend1/dist 
+     
 
       - name: Zip backend1 build folder
         if: github.ref_name == 'main'
         run: zip -r backend1-dist.zip ./backend1/dist
 
-      - name: Upload zipped backend2 build artifact
+      - name: Upload zipped backend1 build artifact
         if: github.ref_name == 'main'
         uses: actions/upload-artifact@v4
         with:
@@ -412,7 +401,7 @@ jobs:
         with:
           image-ref: amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
           format: template
-          template: .trivy/templates/html.tpl
+          template: '@trivy/templates/html.tpl'
           output: backend1-scan.html
       - name: Uploading backend1 scan report 
         uses: actions/upload-artifact@v4
@@ -420,8 +409,8 @@ jobs:
           name: backend1-report
           path: backend1-scan.html 
   backend2:
-    # needs: [changes, semantic-backend2]
-    needs: [changes]
+    needs: [changes, semantic-backend2]
+    # needs: [changes]
     if: ${{ needs.changes.outputs.backend2 == 'true' }}
     runs-on: backend
     environment: >
@@ -433,8 +422,6 @@ jobs:
         run: echo "Hello from the backend"
       - name: Code Cloning to ubuntu
         uses: actions/checkout@v4
-          #- name: Set up Docker
-          #uses: docker/setup-docker-action@v4
       - name: Docker login
         uses: docker/login-action@v3
         with:
@@ -443,10 +430,10 @@ jobs:
       - name: Extract version From the package.json
         id: version
         run: |
-          #  VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend2/package.json)
-          # BACKEND2_VERSION=${{ needs.semantic-backend2.outputs.backend2_version }}
-          BACKEND2_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend2/package.json)
-            echo "BACKEND2_VERSION=$BACKEND2_VERSION" >> $GITHUB_ENV
+         
+          # BACKEND2_VERSION=$(sed -n 's/.*"version": *"\(.*\)".*/\1/p' backend2/package.json)
+          BACKEND2_VERSION=${{ needs.semantic-backend2.outputs.backend2_version }}
+          echo "BACKEND2_VERSION=$BACKEND2_VERSION" >> $GITHUB_ENV
       
       - name: Building the Backend Image
         run: |
@@ -492,11 +479,6 @@ jobs:
         run: yarn build
         working-directory: ./backend2
       
-      # - name: Uploading backend2 build
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: backend2-build
-      #     path: ./backend2/dist 
       
       - name: Zip backend2 build folder
         if: github.ref_name == 'main'
@@ -530,7 +512,7 @@ jobs:
           image-ref: amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
           
           format: template
-          template: .trivy/templates/html.tpl
+          template: '@trivy/templates/html.tpl'
           output: backend2-scan.html
       - name: Uploading backend2 scan report 
         uses: actions/upload-artifact@v4
@@ -538,58 +520,6 @@ jobs:
           name: backend2-report
           path: backend2-scan.html
 
-        
-  # github-pages:
-  #   needs: frontend
-  #   if: needs.changes.outputs.frontend == 'true' && github.ref_name == 'main'
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: github-pages
-  #     url: ${{ steps.deployment.outputs.page_url }}
-  #   permissions:
-  #     contents: read      # To read repo contents
-  #     pages: write        # To deploy to Pages
-  #     id-token: write     # Required by deploy-pages
-
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 18
-
-  #     - name: Install dependencies
-  #       run: yarn install
-  #       working-directory: ./frontend
-
-  #     - name: Build frontend
-  #       run: yarn build
-  #       working-directory: ./frontend
-  #       env:
-  #         VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
-
-  #     - name: Add 404.html for SPA routing
-  #       run: cp ./frontend/dist/index.html ./frontend/dist/404.html
-
-  #     - name: Upload Pages artifact
-  #       uses: actions/upload-pages-artifact@v3
-  #       with:
-  #         path: ./frontend/dist
-
-  # deploy-pages:
-  #   needs: github-pages
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     pages: write
-  #     id-token: write
-  #   environment:
-  #     name: github-pages
-  #   steps:
-  #     - name: Deploy to GitHub Pages
-  #       id: deployment
-  #       uses: actions/deploy-pages@v4  
 
   merge-report:
    needs: [frontend, backend1 , backend2]
@@ -599,19 +529,19 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: frontend-report
-        path: scan
+        path: scan/frontend-scan.html
 
     - name:  backend1 scan report
       uses: actions/download-artifact@v4
       with:
         name: backend1-report
-        path: scan
+        path: scan/backend1-scan.html
 
     - name:  backend2 scan report
       uses: actions/download-artifact@v4
       with:
         name: backend2-report
-        path: scan
+        path: scan/backend2-scan.html
 
     - name: Mixing All three report 
       run: | 
@@ -668,11 +598,6 @@ jobs:
       run: yarn build
       working-directory: ./frontend
    
-    # - name: Upload frontend build as artifact
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: frontend-build
-    #     path: ./frontend/dist
 
     - name: Download merged scan report artifact
       uses: actions/download-artifact@v4
@@ -684,8 +609,6 @@ jobs:
       run: |
         mkdir -p ./frontend/dist/scan
         cp scan/index.html ./frontend/dist/scan/report.html
-    - name: Create 404.html for SPA fallback
-      run: cp ./frontend/dist/index.html ./frontend/dist/404.html
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
       with:
@@ -694,7 +617,57 @@ jobs:
         publish_branch: gh-pages
 
 
-         
+  # github-pages:
+  #   needs: frontend
+  #   if: needs.changes.outputs.frontend == 'true' && github.ref_name == 'main'
+  #   runs-on: ubuntu-latest
+  #   environment:
+  #     name: github-pages
+  #     url: ${{ steps.deployment.outputs.page_url }}
+  #   permissions:
+  #     contents: read      # To read repo contents
+  #     pages: write        # To deploy to Pages
+  #     id-token: write     # Required by deploy-pages
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Setup Node
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 18
+
+  #     - name: Install dependencies
+  #       run: yarn install
+  #       working-directory: ./frontend
+
+  #     - name: Build frontend
+  #       run: yarn build
+  #       working-directory: ./frontend
+  #       env:
+  #         VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
+
+  #     - name: Add 404.html for SPA routing
+  #       run: cp ./frontend/dist/index.html ./frontend/dist/404.html
+
+  #     - name: Upload Pages artifact
+  #       uses: actions/upload-pages-artifact@v3
+  #       with:
+  #         path: ./frontend/dist
+
+  # deploy-pages:
+  #   needs: github-pages
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     pages: write
+  #     id-token: write
+  #   environment:
+  #     name: github-pages
+  #   steps:
+  #     - name: Deploy to GitHub Pages
+  #       id: deployment
+  #       uses: actions/deploy-pages@v4          
   
 
  
