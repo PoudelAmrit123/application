@@ -1,3 +1,10 @@
+# [2.0.0-beta.1](https://github.com/PoudelAmrit123/application/compare/v1.1.0-beta.2...v2.0.0-beta.1) (2025-07-07)
+
+
+### Bug Fixes
+
+* **frontend, backend1, backend2:** implement new shared feature ([9ab45b7](https://github.com/PoudelAmrit123/application/commit/9ab45b7cf2ac389848ed18e786a3273fb31aa894))
+
 # [1.1.0-beta.2](https://github.com/PoudelAmrit123/application/compare/v1.1.0-beta.1...v1.1.0-beta.2) (2025-07-07)
 
 
