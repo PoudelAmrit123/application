@@ -45,145 +45,145 @@ jobs:
           backend2: 
             - 'backend2/**'
 
-  semantic-frontend:
-   runs-on: ubuntu-latest
-   outputs:
-     frontend_version: ${{ steps.semantic-release.outputs.new_release_version}}
-   steps:
-     - name: Checkout
-       uses: actions/checkout@v4
-       with:
-        persist-credentials: false
-        fetch-depth: 0
-     - name: Fetch all tags and branches
-       run: |
-          git fetch --prune 
-          git fetch --tags
+  # semantic-frontend:
+  #  runs-on: ubuntu-latest
+  #  outputs:
+  #    frontend_version: ${{ steps.semantic-release.outputs.new_release_version}}
+  #  steps:
+  #    - name: Checkout
+  #      uses: actions/checkout@v4
+  #      with:
+  #       persist-credentials: false
+  #       fetch-depth: 0
+  #    - name: Fetch all tags and branches
+  #      run: |
+  #         git fetch --prune 
+  #         git fetch --tags
 
-     - name: Sync local branch with remote
-       run: |
-          git reset --hard origin/${{ github.ref_name }}
-     - name: Setting Up Node.js
-       uses: actions/setup-node@v4
-    #- name: Test git push with PAT
-    #   run: |
+  #    - name: Sync local branch with remote
+  #      run: |
+  #         git reset --hard origin/${{ github.ref_name }}
+  #    - name: Setting Up Node.js
+  #      uses: actions/setup-node@v4
+  #   #- name: Test git push with PAT
+  #   #   run: |
        
-    #     git tag test-$(date +%s)
-    #     git remote add auth-origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
-    #     git push auth-origin --tags
+  #   #     git tag test-$(date +%s)
+  #   #     git remote add auth-origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
+  #   #     git push auth-origin --tags
 
 
-     - name: Semantic on dev
-       id: semantic-release
-       uses: cycjimmy/semantic-release-action@v4
-       with:
+  #    - name: Semantic on dev
+  #      id: semantic-release
+  #      uses: cycjimmy/semantic-release-action@v4
+  #      with:
          
-         working_directory: frontend
-         branches: |
-          [
+  #        working_directory: frontend
+  #        branches: |
+  #         [
             
             
-            'main',
+  #           'main',
             
-            {
-              name: 'dev',
-              prerelease: true
-            },
+  #           {
+  #             name: 'dev',
+  #             prerelease: true
+  #           },
             
-          ]
-       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-  semantic-backend1:
-     runs-on: ubuntu-latest
-     outputs:
-      backend1_version: ${{ steps.semantic-release.outputs.new_release_version}}
-     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-         persist-credentials: false
-         fetch-depth: 0
-      - name: Fetch all tags and branches
-        run: |
-          git fetch --prune 
-          git fetch --tags
+  #         ]
+  #      env:
+  #       GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  # semantic-backend1:
+  #    runs-on: ubuntu-latest
+  #    outputs:
+  #     backend1_version: ${{ steps.semantic-release.outputs.new_release_version}}
+  #    steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #        persist-credentials: false
+  #        fetch-depth: 0
+  #     - name: Fetch all tags and branches
+  #       run: |
+  #         git fetch --prune 
+  #         git fetch --tags
 
-      - name: Sync local branch with remote
-        run: |
-          git reset --hard origin/${{ github.ref_name }}
-      - name: Setting Up Node.js
-        uses: actions/setup-node@v4
-      # - name: Test git push permission
-      #   run: |
-      #     git tag test-tag
-      #     git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} test-tag
-      - name: Semantic on backend1
-        id: semantic-release
-        uses: cycjimmy/semantic-release-action@v4
-        with:
+  #     - name: Sync local branch with remote
+  #       run: |
+  #         git reset --hard origin/${{ github.ref_name }}
+  #     - name: Setting Up Node.js
+  #       uses: actions/setup-node@v4
+  #     # - name: Test git push permission
+  #     #   run: |
+  #     #     git tag test-tag
+  #     #     git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} test-tag
+  #     - name: Semantic on backend1
+  #       id: semantic-release
+  #       uses: cycjimmy/semantic-release-action@v4
+  #       with:
            
-            working_directory: backend1
-            branches: |
-              [
+  #           working_directory: backend1
+  #           branches: |
+  #             [
                 
                 
-                'main',
+  #               'main',
                 
-                {
-                  name: 'dev',
-                  prerelease: true
-                },
+  #               {
+  #                 name: 'dev',
+  #                 prerelease: true
+  #               },
                 
-              ]
-        env:
-            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  #             ]
+  #       env:
+  #           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   
-  semantic-backend2:
-     runs-on: ubuntu-latest
-     outputs:
-      backend2_version: ${{ steps.semantic-release.outputs.new_release_version}}
-     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-         persist-credentials: false
-         fetch-depth: 0
-      - name: Fetch all tags and branches
-        run: |
-          git fetch --prune 
-          git fetch --tags
+  # semantic-backend2:
+  #    runs-on: ubuntu-latest
+  #    outputs:
+  #     backend2_version: ${{ steps.semantic-release.outputs.new_release_version}}
+  #    steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #        persist-credentials: false
+  #        fetch-depth: 0
+  #     - name: Fetch all tags and branches
+  #       run: |
+  #         git fetch --prune 
+  #         git fetch --tags
 
-      - name: Sync local branch with remote
-        run: |
-          git reset --hard origin/${{ github.ref_name }}
+  #     - name: Sync local branch with remote
+  #       run: |
+  #         git reset --hard origin/${{ github.ref_name }}
 
-      - name: Setting Up Node.js
-        uses: actions/setup-node@v4
-      # - name: Test git push permission
-      #   run: |
-      #     git tag test-tag
-      #     git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} test-tag
+  #     - name: Setting Up Node.js
+  #       uses: actions/setup-node@v4
+  #     # - name: Test git push permission
+  #     #   run: |
+  #     #     git tag test-tag
+  #     #     git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} test-tag
 
-      - name: Semantic on backend2
-        id: semantic-release
-        uses: cycjimmy/semantic-release-action@v4
-        with:
+  #     - name: Semantic on backend2
+  #       id: semantic-release
+  #       uses: cycjimmy/semantic-release-action@v4
+  #       with:
             
-            working_directory: backend2
-            branches: |
-              [
+  #           working_directory: backend2
+  #           branches: |
+  #             [
                 
                 
-                'main',
+  #               'main',
                 
-                {
-                  name: 'dev',
-                  prerelease: true
-                },
+  #               {
+  #                 name: 'dev',
+  #                 prerelease: true
+  #               },
                 
-              ]
-        env:
-            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
+  #             ]
+  #       env:
+  #           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
   frontend:
     # needs: ['changes' , 'semantic-frontend']
     needs: ['changes' ]
