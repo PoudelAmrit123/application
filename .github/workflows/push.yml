@@ -246,25 +246,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-modules-
 
-      - name: Installing dependencies.
-        run: yarn install
-        working-directory: ./frontend
+      # - name: Installing dependencies.
+      #   run: yarn install
+      #   working-directory: ./frontend
 
-      - name: Building Frontend
-        env:
-          VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
-        run: yarn build
-        working-directory: ./frontend
-      - name: Zip frontend build folder
-        if: github.ref_name == 'main'
-        run: zip -r frontend-dist.zip ./frontend/dist
+      # - name: Building Frontend
+      #   env:
+      #     VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
+      #   run: yarn build
+      #   working-directory: ./frontend
+      # - name: Zip frontend build folder
+      #   if: github.ref_name == 'main'
+      #   run: zip -r frontend-dist.zip ./frontend/dist
 
-      - name: Upload zipped frontend build artifact
-        if: github.ref_name == 'main'
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-dist-zip
-          path: frontend-dist.zip
+      # - name: Upload zipped frontend build artifact
+      #   if: github.ref_name == 'main'
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: frontend-dist-zip
+      #     path: frontend-dist.zip
 
       - name: Create GitHub Release
         if: github.ref_name == 'main'
@@ -274,7 +274,7 @@ jobs:
           name: Release ${{ env.FRONTEND_VERSION }}
           files: |
             frontend-image.tar
-            frontend-dist.zip
+            
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       - name: Download Trivy HTML report template
@@ -346,39 +346,39 @@ jobs:
           name: backend1-image
           path: backend1-image.tar
 
-      - name: Setting up Nodejs
-        uses: actions/setup-node@v4
+      # - name: Setting up Nodejs
+      #   uses: actions/setup-node@v4
 
-      - name: Cache node modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-modules-
+      # - name: Cache node modules
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       **/node_modules
+      #     key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-modules-
 
-      - name: Install backend1 dependencies
-        run: yarn install
-        working-directory: ./backend1
+      # - name: Install backend1 dependencies
+      #   run: yarn install
+      #   working-directory: ./backend1
 
 
-      - name: Building backend1
-        run: yarn build
-        working-directory: ./backend1
+      # - name: Building backend1
+      #   run: yarn build
+      #   working-directory: ./backend1
       
      
 
-      - name: Zip backend1 build folder
-        if: github.ref_name == 'main'
-        run: zip -r backend1-dist.zip ./backend1/dist
+      # - name: Zip backend1 build folder
+      #   if: github.ref_name == 'main'
+      #   run: zip -r backend1-dist.zip ./backend1/dist
 
-      - name: Upload zipped backend1 build artifact
-        if: github.ref_name == 'main'
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend1-dist-zip
-          path: backend1-dist.zip
+      # - name: Upload zipped backend1 build artifact
+      #   if: github.ref_name == 'main'
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: backend1-dist-zip
+      #     path: backend1-dist.zip
 
       - name: Create GitHub Release
         if: github.ref_name == 'main'
@@ -388,7 +388,7 @@ jobs:
           name: Release ${{ env.BACKEND1_VERSION }}
           files: |
             backend1-image.tar
-            backend1-dist.zip
+            
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       - name: Download Trivy HTML report template
@@ -458,31 +458,31 @@ jobs:
         with:
           name: backend2-image
           path: backend2-image.tar
-      - name: Setting up Nodejs
-        uses: actions/setup-node@v4
+      # - name: Setting up Nodejs
+      #   uses: actions/setup-node@v4
 
-      - name: Cache node modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-modules-
+      # - name: Cache node modules
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       **/node_modules
+      #     key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-modules-
       
-      - name: Installing backend2 dependencies
-        run: yarn install
-        working-directory: ./backend2
+      # - name: Installing backend2 dependencies
+      #   run: yarn install
+      #   working-directory: ./backend2
 
 
-      - name: Building backend2
-        run: yarn build
-        working-directory: ./backend2
+      # - name: Building backend2
+      #   run: yarn build
+      #   working-directory: ./backend2
       
       
-      - name: Zip backend2 build folder
-        if: github.ref_name == 'main'
-        run: zip -r backend2-dist.zip ./backend2/dist
+      # - name: Zip backend2 build folder
+      #   if: github.ref_name == 'main'
+      #   run: zip -r backend2-dist.zip ./backend2/dist
 
       - name: Upload zipped backend2 build artifact
         if: github.ref_name == 'main'
@@ -499,7 +499,7 @@ jobs:
           name: Release ${{ env.BACKEND2_VERSION }}
           files: |
             backend2-image.tar
-            backend2-dist.zip
+            
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       - name: Download Trivy HTML report template
