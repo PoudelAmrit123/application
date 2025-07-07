@@ -1,0 +1,13 @@
+{
+  "devDependencies": {
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.2.6",
+    "semantic-release": "^21.1.2"
+  },
+  "name": "application",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:PoudelAmrit123/application.git",
+  "author": "amrit <amritpoudel433@gmail.com>",
+  "license": "MIT"
+}
