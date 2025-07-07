@@ -287,7 +287,7 @@ jobs:
         with:
           image-ref: amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
           format: template
-          template: '@trivy/templates/html.tpl'
+          template: '@.trivy/templates/html.tpl'
           output: frontend-scan.html
       - name: Uploading frontend scan report 
         uses: actions/upload-artifact@v4
@@ -401,7 +401,7 @@ jobs:
         with:
           image-ref: amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
           format: template
-          template: '@trivy/templates/html.tpl'
+          template: '@.trivy/templates/html.tpl'
           output: backend1-scan.html
       - name: Uploading backend1 scan report 
         uses: actions/upload-artifact@v4
@@ -512,7 +512,7 @@ jobs:
           image-ref: amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
           
           format: template
-          template: '@trivy/templates/html.tpl'
+          template: '@.trivy/templates/html.tpl'
           output: backend2-scan.html
       - name: Uploading backend2 scan report 
         uses: actions/upload-artifact@v4
