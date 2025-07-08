@@ -5,14 +5,14 @@ on:
     workflows: ["Release"]
     types:
       - completed
- push:
-   branches:
-     - dev
-     - main
-   paths:
-     - 'frontend/**'
-     - 'backend1/**'
-     - 'backend2/**'
+#  push:
+#    branches:
+#      - dev
+#      - main
+#    paths:
+#      - 'frontend/**'
+#      - 'backend1/**'
+#      - 'backend2/**'
 
    
 # env:
