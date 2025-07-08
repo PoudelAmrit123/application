@@ -85,22 +85,31 @@ jobs:
       #       # FRONTEND_VERSION=${{ needs.semantic-frontend.outputs.frontend_version }}
       #       echo "FRONTEND_VERSION=$FRONTEND_VERSION" >> $GITHUB_ENV
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Building the Frontend Image
+        run: |
+          docker build -t amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY}}  ./frontend
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+          docker tag amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} amritpoudel/frontend:${{  env.FRONTEND_VERSION }}
 
-      - name: Build and push frontend image
-        uses: docker/build-push-action@v6
+          docker push amritpoudel/frontend:${{  env.FRONTEND_VERSION }}
+
+          if [ "${{ github.ref_name }}" = "main" ]; then
+          docker tag amritpoudel/frontend:${{ github.ref_name }}-${{ github.sha }} amritpoudel/frontend:latest
+          docker push amritpoudel/frontend:latest
+          fi
+      
+          
+      - name: Saving Docker image as artifacts
+        run: |
+         docker save -o frontend-image.tar amritpoudel/frontend:${{  env.FRONTEND_VERSION }}
+      - name : Upload Frontend image  artifact
+        uses: actions/upload-artifact@v4
         with:
-          context: ./frontend
-          push: true
-          tags: |
-            amritpoudel/frontend:${{ env.FRONTEND_VERSION }}
-            ${{ github.ref_name == 'main' && 'amritpoudel/frontend:latest' || '' }}
-          build-args: |
-            VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
+          name: frontend-image
+          path: frontend-image.tar
+      - name: setting up Node.js
+        uses: actions/setup-node@v4
+
 
 
     
@@ -188,20 +197,27 @@ jobs:
           echo "Latest tag is $VERSION"
           echo "BACKEND1_VERSION=${VERSION}" >> $GITHUB_ENV
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Building the Backend Image
+        run: |
+          docker build -t amritpoudel/backend1:${{ github.ref_name }}-${{ github.sha }} ./backend1
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+          docker tag amritpoudel/backend1:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
 
-      - name: Build and push backend1 image
-        uses: docker/build-push-action@v6
+          docker push amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
+
+          if [ "${{ github.ref_name }}" = "main" ]; then
+          docker tag amritpoudel/backend1:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend1:latest
+          docker push amritpoudel/backend1:latest
+          fi
+      
+      - name: Saving Docker image as artifacts
+        run: |
+         docker save -o backend1-image.tar amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
+      - name : Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          context: ./backend1
-          push: true
-          tags: |
-            amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
-            ${{ github.ref_name == 'main' && 'amritpoudel/backend1:latest' || '' }}
+          name: backend1-image
+          path: backend1-image.tar
       
       # - name: Saving Docker image as artifacts
       #   run: |
@@ -270,20 +286,30 @@ jobs:
           echo "Latest tag is $VERSION"
           echo "BACKEND2_VERSION=${VERSION}" >> $GITHUB_ENV
       
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Building the Backend Image
+        run: |
+          docker build -t amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} ./backend2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+          docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
 
-      - name: Build and push backend2 image
-        uses: docker/build-push-action@v6
+          docker push amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
+
+           if [ "${{ github.ref_name }}" = "main" ]; then
+              docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
+
+              docker push amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
+              docker tag amritpoudel/backend2:${{ github.ref_name }}-${{ github.sha }} amritpoudel/backend2:latest
+              docker push amritpoudel/backend2:latest
+          fi
+      - name: Saving Docker image as artifacts
+        run: |
+         docker save -o backend2-image.tar amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
+      - name : Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          context: ./backend2
-          push: true
-          tags: |
-            amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
-            ${{ github.ref_name == 'main' && 'amritpoudel/backend2:latest' || '' }}
+          name: backend2-image
+          path: backend2-image.tar
+
 
       # - name: Saving Docker image as artifacts
       #   run: |
