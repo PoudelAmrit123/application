@@ -106,14 +106,14 @@ jobs:
     
       
           
-      - name: Saving Docker image as artifacts
-        run: |
-         docker save -o frontend-image.tar amritpoudel/frontend:latest
-      - name : Upload Frontend image  artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-image
-          path: frontend-image.tar
+      # - name: Saving Docker image as artifacts
+      #   run: |
+      #    docker save -o frontend-image.tar amritpoudel/frontend:latest
+      # - name : Upload Frontend image  artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: frontend-image
+      #     path: frontend-image.tar
       - name: setting up Node.js
         uses: actions/setup-node@v4
 
@@ -129,14 +129,14 @@ jobs:
       
      
 
-      - name: Create GitHub Release
-        if: github.ref_name == 'main'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{  env.FRONTEND_VERSION }}
-          name: Release ${{  env.FRONTEND_VERSION }}
-          files: |
-            frontend-image.tar
+      # - name: Create GitHub Release
+      #   if: github.ref_name == 'main'
+      #   uses: softprops/action-gh-release@v2
+      #   with:
+      #     tag_name: ${{  env.FRONTEND_VERSION }}
+      #     name: Release ${{  env.FRONTEND_VERSION }}
+      #     files: |
+      #       frontend-image.tar
             
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -203,25 +203,25 @@ jobs:
             amritpoudel/backend1:${{ env.BACKEND1_VERSION }}
             ${{ github.ref_name == 'main' && 'amritpoudel/backend1:latest' || '' }}
       
-      - name: Saving Docker image as artifacts
-        run: |
-         docker save -o backend1-image.tar amritpoudel/backend1:latest
-      - name : Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend1-image
-          path: backend1-image.tar
+      # - name: Saving Docker image as artifacts
+      #   run: |
+      #    docker save -o backend1-image.tar amritpoudel/backend1:latest
+      # - name : Upload artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: backend1-image
+      #     path: backend1-image.tar
 
      
 
-      - name: Create GitHub Release
-        if: github.ref_name == 'main'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ env.BACKEND1_VERSION }}
-          name: Release ${{ env.BACKEND1_VERSION }}
-          files: |
-            backend1-image.tar
+      # - name: Create GitHub Release
+      #   if: github.ref_name == 'main'
+      #   uses: softprops/action-gh-release@v2
+      #   with:
+      #     tag_name: ${{ env.BACKEND1_VERSION }}
+      #     name: Release ${{ env.BACKEND1_VERSION }}
+      #     files: |
+      #       backend1-image.tar
             
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -285,14 +285,14 @@ jobs:
             amritpoudel/backend2:${{ env.BACKEND2_VERSION }}
             ${{ github.ref_name == 'main' && 'amritpoudel/backend2:latest' || '' }}
 
-      - name: Saving Docker image as artifacts
-        run: |
-          docker save -o backend2-image.tar amritpoudel/backend2:latest
-      - name : Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend2-image
-          path: backend2-image.tar
+      # - name: Saving Docker image as artifacts
+      #   run: |
+      #     docker save -o backend2-image.tar amritpoudel/backend2:latest
+      # - name : Upload artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: backend2-image
+      #     path: backend2-image.tar
       
 
       - name: Upload zipped backend2 build artifact
