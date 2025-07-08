@@ -416,6 +416,13 @@ jobs:
           github.ref_name == 'dev' && 'dev' ||
           github.ref_name == 'main' && 'main' }}
    steps:
+     - name: Prepare PostgreSQL container
+       run: >
+         ssh -o StrictHostKeyChecking=no kali@192.168.0.106 '
+          docker rm -f postgresql || true &&
+          docker network rm fellownetwork || true &&
+          docker volume rm pg_data || true
+         '
      - name: PostgresSql
        run: |
           ssh -o StrictHostKeyChecking=no kali@192.168.0.106 << EOF
@@ -438,6 +445,7 @@ jobs:
      - name: Backend1
        run: |
         ssh -o StrictHostKeyChecking=no kali@192.168.0.106 << EOF
+            docker rm -f backend1 || true &&
             docker run -d \
               --name backend1 \
               --network fellownetwork \
@@ -462,6 +470,7 @@ jobs:
      - name: Backend2
        run: |
         ssh -o StrictHostKeyChecking=no kali@192.168.0.106 << EOF
+            docker rm -f backend2 || true &&
             docker run -d \
               --name backend2 \
               --network fellownetwork \
