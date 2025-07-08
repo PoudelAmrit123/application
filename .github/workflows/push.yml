@@ -295,12 +295,12 @@ jobs:
       #     path: backend2-image.tar
       
 
-      - name: Upload zipped backend2 build artifact
-        if: github.ref_name == 'main'
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend2-dist-zip
-          path: backend2-dist.zip
+      # - name: Upload zipped backend2 build artifact
+      #   if: github.ref_name == 'main'
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: backend2-dist-zip
+      #     path: backend2-dist.zip
 
       - name: Create GitHub Release
         if: github.ref_name == 'main'
