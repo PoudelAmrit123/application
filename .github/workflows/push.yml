@@ -430,7 +430,7 @@ jobs:
             docker volume create pg_data || true
 
             docker run -d \
-              --name postgresql \
+              --name postgresqlFellow \
               --network fellownetwork \
               -p 5432:5432 \
               -e POSTGRES_USER=$DB_USER \
