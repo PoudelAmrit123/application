@@ -1,3 +1,10 @@
+# [2.0.0-beta.16](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.15...v2.0.0-beta.16) (2025-07-08)
+
+
+### Bug Fixes
+
+* **frontend:** changed the frontend ([af9ac57](https://github.com/PoudelAmrit123/application/commit/af9ac5784e8c19cd3cbda55c303066c5d68083b4))
+
 # [2.0.0-beta.15](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2025-07-08)
 
 
