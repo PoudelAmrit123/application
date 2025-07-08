@@ -1,7 +1,10 @@
+
 # [2.0.0-beta.11](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.10...v2.0.0-beta.11) (2025-07-08)
 
 
+
 ### Bug Fixes
+
 
 * **backend1:** fixed the backend ([3a57ed3](https://github.com/PoudelAmrit123/application/commit/3a57ed310e08d4790350989ea4a09f99969e6bfe))
 * **backend2:** fixed the backend2 ([11ce05e](https://github.com/PoudelAmrit123/application/commit/11ce05e4c1e8de33f38a211f2150d57382d72ef5))
@@ -15,6 +18,7 @@
 * **backend1:** fixed backend1 ([9a35b63](https://github.com/PoudelAmrit123/application/commit/9a35b6333e4fa44ef4573c0e2aaf53c93995edaf))
 * **backend2:** fixed backend2 ([50017f1](https://github.com/PoudelAmrit123/application/commit/50017f19b72d1b61dd01b19201d99ccf62b8c0df))
 * **frontend:** fixed frontend ([5f24738](https://github.com/PoudelAmrit123/application/commit/5f24738e065cda96260f2b7b048a947f5d53cd56))
+
 
 # [2.0.0-beta.9](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.8...v2.0.0-beta.9) (2025-07-08)
 
