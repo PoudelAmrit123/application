@@ -416,6 +416,13 @@ jobs:
           github.ref_name == 'dev' && 'dev' ||
           github.ref_name == 'main' && 'main' }}
    steps:
+     - name: Prepare PostgreSQL container
+       run: >
+         ssh -o StrictHostKeyChecking=no kali@192.168.0.106 '
+          docker rm -f postgresql || true &&
+          docker network rm fellownetwork || true &&
+          docker volume rm pg_data || true
+         '
      - name: PostgresSql
        run: |
           ssh -o StrictHostKeyChecking=no kali@192.168.0.106 << EOF
@@ -438,6 +445,7 @@ jobs:
      - name: Backend1
        run: |
         ssh -o StrictHostKeyChecking=no kali@192.168.0.106 << EOF
+            docker rm -f backend1 || true &&
             docker run -d \
               --name backend1 \
               --network fellownetwork \
@@ -453,7 +461,7 @@ jobs:
               -e CLERK_PUBLISHABLE_KEY="$CLERK_PUBLISHABLE_KEY" \
               -e CLERK_SECRET_KEY="$CLERK_SECRET_KEY" \
               amritpoudel/backend1:latest
-          EOF
+        EOF
      - name: Run migrations on backend1
        run: |
           ssh -o StrictHostKeyChecking=no kali@192.168.0.106 << EOF
@@ -462,11 +470,12 @@ jobs:
      - name: Backend2
        run: |
         ssh -o StrictHostKeyChecking=no kali@192.168.0.106 << EOF
+            docker rm -f backend2 || true &&
             docker run -d \
               --name backend2 \
               --network fellownetwork \
-              -p 3000:3000 \
-              -e PORT=3000 \
+              -p 3001:3001 \
+              -e PORT=3001 \
               -e DB_PORT=$DB_PORT \
               -e DB_HOST=$DB_HOST \
               -e DB_USER=$DB_USER \
@@ -477,12 +486,12 @@ jobs:
               -e CLERK_PUBLISHABLE_KEY="$CLERK_PUBLISHABLE_KEY" \
               -e CLERK_SECRET_KEY="$CLERK_SECRET_KEY" \
               amritpoudel/backend2:latest
-          EOF
+        EOF
         
      - name: Run migrations on backend1
        run: |
           ssh -o StrictHostKeyChecking=no kali@192.168.0.106 << EOF
-            docker exec backend1 yarn migrate
+            docker exec backend2 yarn migrate
           EOF
 
 
