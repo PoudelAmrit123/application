@@ -1,13 +1,13 @@
-## [1.1.8](https://github.com/PoudelAmrit123/application/compare/v1.1.7...v1.1.8) (2025-07-08)
+
+# [2.0.0-beta.20](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.19...v2.0.0-beta.20) (2025-07-08)
+
 
 
 ### Bug Fixes
 
-* fixed the frontend ([3f560f3](https://github.com/PoudelAmrit123/application/commit/3f560f3e20bd4d07f9653c7fcb30c8362745b64a))
-* **frontend:** changed the frontend ([af9ac57](https://github.com/PoudelAmrit123/application/commit/af9ac5784e8c19cd3cbda55c303066c5d68083b4))
-* **frontend:** fixed the frontend ([fa489bd](https://github.com/PoudelAmrit123/application/commit/fa489bd18443862d08a9930ae5b3699867df6bf7))
-* **frontend:** fixed the frontend ([ebc5d56](https://github.com/PoudelAmrit123/application/commit/ebc5d56a7aec728a4c28fcd2c5e15851410294d6))
-* **frontend:** fixed the frontend ([d0741f7](https://github.com/PoudelAmrit123/application/commit/d0741f75974f0e8cd69f22861bd13eaf6408082f))
+
+* **frontend:** fixed the frontend ([ebecdfa](https://github.com/PoudelAmrit123/application/commit/ebecdfa02d49ab41693585f079638d4cfa83a07d))
+
 
 # [2.0.0-beta.19](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.18...v2.0.0-beta.19) (2025-07-08)
 
