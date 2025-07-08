@@ -4,6 +4,10 @@ on:
     branches:
       - main
       - dev
+    paths:
+      - 'frontend/**'
+      - 'backend1/**'
+      - 'backend2/**'
 jobs:
   release:
     runs-on: ubuntu-latest
