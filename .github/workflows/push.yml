@@ -465,8 +465,8 @@ jobs:
             docker run -d \
               --name backend2 \
               --network fellownetwork \
-              -p 3000:3000 \
-              -e PORT=3000 \
+              -p 3001:3001 \
+              -e PORT=3001 \
               -e DB_PORT=$DB_PORT \
               -e DB_HOST=$DB_HOST \
               -e DB_USER=$DB_USER \
@@ -482,7 +482,7 @@ jobs:
      - name: Run migrations on backend1
        run: |
           ssh -o StrictHostKeyChecking=no kali@192.168.0.106 << EOF
-            docker exec backend1 yarn migrate
+            docker exec backend2 yarn migrate
           EOF
 
 
