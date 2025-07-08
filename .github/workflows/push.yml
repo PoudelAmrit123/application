@@ -430,13 +430,13 @@ jobs:
             docker volume create pg_data || true
 
             docker run -d \
-              --name postgresql \
+              --name postgresqlFellow \
               --network fellownetwork \
               -p 5432:5432 \
               -e POSTGRES_USER=$DB_USER \
               -e POSTGRES_PASSWORD=$DB_PASSWORD \
               -e POSTGRES_DB=$DB_NAME \
-              -v pg_data:/var/lib/postgresql/data \
+              -v pg_data:/var/lib/postgresqlFellow/data \
               --restart always \
               --cpus=1.0 \
               --memory=1g \
