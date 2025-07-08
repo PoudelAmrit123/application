@@ -1,4 +1,6 @@
+
 # [2.0.0-beta.8](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.7...v2.0.0-beta.8) (2025-07-08)
+
 
 
 ### Bug Fixes
