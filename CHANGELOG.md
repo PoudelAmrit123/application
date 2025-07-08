@@ -1,9 +1,13 @@
+
 # [2.0.0-beta.20](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.19...v2.0.0-beta.20) (2025-07-08)
+
 
 
 ### Bug Fixes
 
+
 * **frontend:** fixed the frontend ([ebecdfa](https://github.com/PoudelAmrit123/application/commit/ebecdfa02d49ab41693585f079638d4cfa83a07d))
+
 
 # [2.0.0-beta.19](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.18...v2.0.0-beta.19) (2025-07-08)
 
