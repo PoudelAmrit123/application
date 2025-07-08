@@ -1,3 +1,11 @@
+# [2.0.0-beta.13](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.12...v2.0.0-beta.13) (2025-07-08)
+
+
+### Bug Fixes
+
+* added the backend1 ([7974da3](https://github.com/PoudelAmrit123/application/commit/7974da38aac44a0f47a4a8f92c4ec84ea65dc9e8))
+* added the backend2 ([09525f9](https://github.com/PoudelAmrit123/application/commit/09525f970f5cfe269406eedd307a12b219610817))
+
 # [2.0.0-beta.12](https://github.com/PoudelAmrit123/application/compare/v2.0.0-beta.11...v2.0.0-beta.12) (2025-07-08)
 
 
