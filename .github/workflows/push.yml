@@ -488,31 +488,7 @@ jobs:
         with:
           name: backend2-image
           path: backend2-image.tar
-      # - name: Setting up Nodejs
-      #   uses: actions/setup-node@v4
-
-      # - name: Cache node modules
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: |
-      #       **/node_modules
-      #     key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-modules-
       
-      # - name: Installing backend2 dependencies
-      #   run: yarn install
-      #   working-directory: ./backend2
-
-
-      # - name: Building backend2
-      #   run: yarn build
-      #   working-directory: ./backend2
-      
-      
-      # - name: Zip backend2 build folder
-      #   if: github.ref_name == 'main'
-      #   run: zip -r backend2-dist.zip ./backend2/dist
 
       - name: Upload zipped backend2 build artifact
         if: github.ref_name == 'main'
